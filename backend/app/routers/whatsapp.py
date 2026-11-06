@@ -57,7 +57,7 @@ async def send_one(body: SendRequest, _admin=Depends(get_current_admin)):
     return result
 
 
-@router.post("/preview", summary="Prévisualiser un modèle de message + lien (admin)")
+@router.api_route("/preview", methods=["GET", "POST"], summary="Prévisualiser un modèle de message + lien (admin)")
 def preview(template: str, phone: str, guest_name: str = "Cher·e invité·e", base_url: str = ""):
     message = _render(template, guest_name, base_url)
     return {

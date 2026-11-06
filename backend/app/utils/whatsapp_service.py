@@ -41,7 +41,7 @@ def tpl_invitation(guest_name: str, base_url: str) -> str:
         f"Bonjour {guest_name} 🌿\n\n"
         f"C'est avec une immense joie que nous vous invitons au mariage de "
         f"Diane KPADONOU & Amon ALPHONSE 💍\n"
-        f"📅 Vendredi 4 décembre 2026 — Mairie de Port-Bouët (10h00), réception au Pieu de Grand-Bassam.\n\n"
+        f"📅 Vendredi 4 décembre 2026 — Mairie de Port-Bouët (12h00), puis Pieu de Grand-Bassam (cocktail 14h00 · réception 15h00).\n\n"
         f"Votre invitation & confirmation de présence ici :\n{base_url}\n\n"
         f"Dress code : tenue de soirée 👑\n"
         f"#DianeEtAmon2026"

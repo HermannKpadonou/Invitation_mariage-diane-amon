@@ -116,7 +116,9 @@
         <h2 id="wa-h" class="font-display text-lg tracking-wide text-gold uppercase flex items-center gap-2">
           <i data-lucide="message-circle" class="w-5 h-5"></i> Envoi WhatsApp
         </h2>
-        <p class="text-cream/60 text-sm mt-2">Mode « lien » actif : chaque envoi génère un message pré-rempli, prêt à cliquer depuis votre téléphone. (Connectez la Cloud API Meta dans le <code class="text-gold/90">.env</code> pour l'envoi 100&nbsp;% automatique.)</p>
+        <p class="text-cream/60 text-sm mt-2 leading-relaxed">
+          Choisissez un modèle puis cliquez sur <strong class="text-cream/85">Préparer les messages</strong> : chaque invité ciblé reçoit une ligne avec un bouton <strong class="text-cream/85">Envoyer</strong> — WhatsApp s'ouvre avec le texte déjà écrit, il ne reste qu'à appuyer sur « envoyer » depuis votre téléphone. Aucun compte ni logiciel à installer.
+        </p>
         <form id="wa-form" class="grid sm:grid-cols-4 gap-3 mt-5 items-end">
           <div>
             <label for="wa-tpl" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Modèle</label>
@@ -125,6 +127,7 @@
               <option value="reminder" selected>Rappel (pas encore répondu)</option>
               <option value="thanks">Remerciement</option>
             </select>
+            <p id="wa-tpl-hint" class="text-[11px] text-cream/45 mt-1.5 leading-snug"></p>
           </div>
           <div>
             <label for="wa-status" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Cible</label>
@@ -134,16 +137,27 @@
               <option value="absent">Absents</option>
               <option value="">Tous les invités</option>
             </select>
+            <p class="text-[11px] text-cream/45 mt-1.5 leading-snug">Seuls les invités de cette catégorie reçoivent le message.</p>
           </div>
           <div>
             <label for="wa-url" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Lien de l'invitation</label>
-            <input id="wa-url" type="url" value="http://localhost:8010" placeholder="https://mon-invitation.netlify.app"
+            <input id="wa-url" type="url" placeholder="https://invitation-mariage-diane-amon.onrender.com"
                    class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-3 py-2.5 text-cream text-sm focus:border-gold focus:outline-none" />
+            <p class="text-[11px] text-cream/45 mt-1.5 leading-snug">Pré-rempli avec l'adresse du site — laissez telle quelle.</p>
           </div>
           <button type="submit" id="wa-go" class="rounded-full bg-[#25D366] text-[#08351c] font-bold text-sm px-5 py-2.5 hover:bg-[#1fb457] transition-colors inline-flex items-center justify-center gap-2">
-            <i data-lucide="send" class="w-4 h-4"></i> Générer les envois
+            <i data-lucide="send" class="w-4 h-4"></i> Préparer les messages
           </button>
         </form>
+
+        <!-- Aperçu du message (style WhatsApp) -->
+        <div class="mt-6 rounded-2xl border border-gold/20 bg-[#0B141A] p-4" aria-label="Aperçu du message">
+          <p class="text-[10px] uppercase tracking-widest text-cream/40 flex items-center gap-1.5">
+            <i data-lucide="eye" class="w-3.5 h-3.5"></i> Aperçu — tel que l'invité le recevra
+          </p>
+          <div id="wa-preview-txt" class="mt-3 sm:mr-10 max-w-md ml-auto rounded-2xl rounded-tr-sm bg-[#005C4B] px-4 py-3 text-[13px] leading-relaxed text-[#E9EDEF] whitespace-pre-line">…</div>
+        </div>
+
         <div id="wa-results" class="hidden mt-6">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-cream/80" id="wa-count"></h3>
@@ -168,8 +182,13 @@
             </button>
           </div>
         </div>
+        <div class="mt-5 relative">
+          <i data-lucide="search" class="w-4 h-4 text-cream/40 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input id="guest-search" type="search" placeholder="Rechercher un invité (nom ou téléphone)…" aria-label="Rechercher un invité"
+                 class="w-full rounded-xl bg-royal-deep/70 border border-gold/30 pl-9 pr-4 py-2.5 text-sm text-cream placeholder:text-cream/35 focus:border-gold focus:outline-none" />
+        </div>
         <div class="mt-5 overflow-x-auto">
-          <table class="w-full text-sm">
+          <table class="w-full text-sm min-w-[680px]">
             <thead>
               <tr class="text-left text-gold/80 text-xs uppercase tracking-widest border-b border-gold/25">
                 <th class="py-3 pr-3">Invité</th><th class="py-3 pr-3">Téléphone</th>
@@ -346,7 +365,12 @@
   async function loadGuests() {
     GUESTS = await (await fetch(`${API}/api/guests`, { headers: authHeaders() })).json();
     $('#g-count').textContent = `(${GUESTS.length})`;
-    $('#guest-rows').innerHTML = GUESTS.map(g => {
+    renderGuests();
+  }
+  function renderGuests() {
+    const q = ($('#guest-search').value || '').trim().toLowerCase();
+    const list = q ? GUESTS.filter(g => `${g.first_name} ${g.last_name} ${g.phone || ''}`.toLowerCase().includes(q)) : GUESTS;
+    $('#guest-rows').innerHTML = list.map(g => {
       const [cls, label] = STATUS_BADGE[g.status] || STATUS_BADGE.pending;
       return `<tr class="border-b border-gold/10 row-in" data-id="${g.id}">
         <td class="py-3 pr-3 font-semibold">${esc(g.first_name)} ${esc(g.last_name)}</td>
@@ -360,9 +384,10 @@
           ${g.phone ? `<button data-act="wa" title="Message WhatsApp" class="inline-flex w-8 h-8 items-center justify-center rounded-full text-[#25D366] hover:bg-[#25D366]/15 transition-colors"><i data-lucide="message-circle" class="w-4 h-4"></i></button>` : ''}
           <button data-act="del" title="Supprimer" class="inline-flex w-8 h-8 items-center justify-center rounded-full text-kente-red hover:bg-kente-red/15 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
         </td></tr>`;
-    }).join('');
+    }).join('') || '<tr><td colspan="6" class="py-6 text-center text-cream/40 text-xs">Aucun invité trouvé pour cette recherche.</td></tr>';
     window.lucide?.createIcons();
   }
+  $('#guest-search').addEventListener('input', renderGuests);
 
   $('#guest-rows').addEventListener('change', async e => {
     if (e.target.dataset.act !== 'status') return;
@@ -404,9 +429,44 @@
   });
 
   /* ── WhatsApp broadcast ───────────────────────────────── */
+  const WA_HINTS = {
+    invitation: 'La belle invitation complète avec le lien du site — à envoyer en premier à chaque invité.',
+    reminder:   'Un petit rappel doux pour les invités qui n\u2019ont pas encore répondu.',
+    thanks:     'Un mot de remerciement chaleureux, pour ceux qui ont déjà répondu.'
+  };
+  /* Lien de l'invitation : pré-rempli avec l'adresse du site (même origine que
+     cette page), personnalisable puis mémorisé pour les prochaines fois. */
+  $('#wa-url').value = localStorage.getItem('admin.inviteUrl')
+    || (location.protocol.startsWith('http') ? location.origin : 'https://invitation-mariage-diane-amon.onrender.com');
+  $('#wa-url').addEventListener('change', () => localStorage.setItem('admin.inviteUrl', $('#wa-url').value.trim()));
+
+  let waPreviewTimer;
+  async function refreshWaPreview() {
+    try {
+      const u = new URL(`${API}/api/whatsapp/preview`);
+      u.searchParams.set('template', $('#wa-tpl').value);
+      u.searchParams.set('phone', '+2250000000000');
+      u.searchParams.set('guest_name', 'Awa');
+      u.searchParams.set('base_url', $('#wa-url').value.trim());
+      const d = await (await fetch(u)).json();
+      $('#wa-preview-txt').textContent = d.message || '…';
+    } catch {
+      $('#wa-preview-txt').textContent = 'Aperçu indisponible — serveur injoignable.';
+    }
+  }
+  $('#wa-tpl').addEventListener('change', () => {
+    $('#wa-tpl-hint').textContent = WA_HINTS[$('#wa-tpl').value] || '';
+    refreshWaPreview();
+  });
+  $('#wa-url').addEventListener('input', () => {
+    clearTimeout(waPreviewTimer); waPreviewTimer = setTimeout(refreshWaPreview, 600);
+  });
+  $('#wa-tpl-hint').textContent = WA_HINTS[$('#wa-tpl').value] || '';
+  refreshWaPreview();
+
   $('#wa-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const btn = $('#wa-go'); btn.disabled = true; btn.textContent = 'Génération…';
+    const btn = $('#wa-go'); btn.disabled = true; btn.textContent = 'Préparation…';
     try {
       const r = await fetch(`${API}/api/whatsapp/broadcast`, {
         method: 'POST', headers: authHeaders(),
@@ -424,13 +484,15 @@
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Envoyer
           </a></li>`).join('');
       $('#wa-results').classList.remove('hidden');
+      $('#wa-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      toast(`${links.length} message(s) prêt(s) — cliquez « Envoyer » ✅`);
       window.lucide?.createIcons();
       $('#wa-open-all').onclick = () => links.forEach((x, i) => setTimeout(() => window.open(x.link, '_blank'), i * 600));
     } catch (err) {
       alert(err.message);
     } finally {
       btn.disabled = false;
-      btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i> Générer les envois';
+      btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i> Préparer les messages';
       window.lucide?.createIcons();
     }
   });
