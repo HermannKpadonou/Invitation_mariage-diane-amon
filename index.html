@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ═══════════════════════════════════════════════════════════════
+       💌 INVITATION DE MARIAGE DIGITALE — single file, 100% statique
+       Stack : HTML5 + Tailwind CDN + Vanilla JS (ES2022)
+       Persistance locale : localStorage — aucun backend requis.
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ── SEO & Partage social ──
+       ⚠️ Remplacez les placeholders (og:title, og:description, og:image)
+       par vos données + une image 1200×630 (WebP/JPG). -->
+  <title>Invitation — Mariage de Diane &amp; Amon</title>
+  <meta name="description" content="Vous êtes invité·e au mariage de Diane KPADONOU & Amon ALPHONSE — Vendredi 4 décembre 2026, Mairie de Port-Bouët & Grand-Bassam. Programme, itinéraire, dress code et confirmation de présence." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Vous êtes invité·e — Mariage de Diane &amp; Amon 🤍" />
+  <meta property="og:description" content="Vendredi 4 décembre 2026 · Cérémonie civile à la Mairie de Port-Bouët, réception au Pieu de Grand-Bassam. Répondez avant le 20 novembre." />
+  <meta property="og:image" content="[OG_IMAGE_URL]" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta name="theme-color" content="#12362B" />
+
+  <!-- Favicon : monogramme SVG inline (aucune requête réseau) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23FAF7F2' stroke='%23C9A961' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' fill='%238C6D33' text-anchor='middle'%3E%E2%9D%A4%3C/text%3E%3C/svg%3E" />
+
+  <!-- ── Typographie : serif éditoriale + sans-serif lisible ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- ── Tailwind CSS (CDN) ── -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream:  '#F7F1E3',
+            sand:   '#E4D5B8',
+            gold:   { light:'#E9CF8F', DEFAULT:'#C9A227', deep:'#8C6D33' }, /* deep = texte or lisible AA */
+            sage:   '#9CAF88',
+            sageDeep:'#6F8064',
+            royal:  { DEFAULT:'#12362B', deep:'#0B241C', light:'#1C4A3A' }, /* vert impérial */
+            kente:  { red:'#9E2B25', orange:'#C75B12' },
+            blush:  '#E9D3D1',
+            ink:    '#2E2618' /* texte principal — contraste > 12:1 sur crème */
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            display: ['Cinzel', 'Georgia', 'serif'],
+            sans:  ['Manrope', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 10px 30px -12px rgba(30,24,12,.25)',
+            lift: '0 18px 45px -15px rgba(30,24,12,.38)',
+            glow: '0 0 0 1px rgba(201,162,39,.55), 0 14px 40px -12px rgba(201,162,39,.35)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- ── Bibliothèques légères : QR code + icônes ── -->
+  <script>
+  /* qrcodejs 1.0.0 (MIT, davidshimjs) - INTEGRE dans le fichier pour que le pass QR
+     fonctionne TOUJOURS, meme sans connexion et si le CDN est bloque. */
+  var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this.parsedData=[];for(var b=[],d=0,e=this.data.length;e>d;d++){var f=this.data.charCodeAt(d);f>65536?(b[0]=240|(1835008&f)>>>18,b[1]=128|(258048&f)>>>12,b[2]=128|(4032&f)>>>6,b[3]=128|63&f):f>2048?(b[0]=224|(61440&f)>>>12,b[1]=128|(4032&f)>>>6,b[2]=128|63&f):f>128?(b[0]=192|(1984&f)>>>6,b[1]=128|63&f):b[0]=f,this.parsedData=this.parsedData.concat(b)}this.parsedData.length!=this.data.length&&(this.parsedData.unshift(191),this.parsedData.unshift(187),this.parsedData.unshift(239))}function b(a,b){this.typeNumber=a,this.errorCorrectLevel=b,this.modules=null,this.moduleCount=0,this.dataCache=null,this.dataList=[]}function i(a,b){if(void 0==a.length)throw new Error(a.length+"/"+b);for(var c=0;c<a.length&&0==a[c];)c++;this.num=new Array(a.length-c+b);for(var d=0;d<a.length-c;d++)this.num[d]=a[d+c]}function j(a,b){this.totalCount=a,this.dataCount=b}function k(){this.buffer=[],this.length=0}function m(){return"undefined"!=typeof CanvasRenderingContext2D}function n(){var a=!1,b=navigator.userAgent;return/android/i.test(b)&&(a=!0,aMat=b.toString().match(/android ([0-9]\.[0-9])/i),aMat&&aMat[1]&&(a=parseFloat(aMat[1]))),a}function r(a,b){for(var c=1,e=s(a),f=0,g=l.length;g>=f;f++){var h=0;switch(b){case d.L:h=l[f][0];break;case d.M:h=l[f][1];break;case d.Q:h=l[f][2];break;case d.H:h=l[f][3]}if(h>=e)break;c++}if(c>l.length)throw new Error("Too long data");return c}function s(a){var b=encodeURI(a).toString().replace(/\%[0-9a-fA-F]{2}/g,"a");return b.length+(b.length!=a?3:0)}a.prototype={getLength:function(){return this.parsedData.length},write:function(a){for(var b=0,c=this.parsedData.length;c>b;b++)a.put(this.parsedData[b],8)}},b.prototype={addData:function(b){var c=new a(b);this.dataList.push(c),this.dataCache=null},isDark:function(a,b){if(0>a||this.moduleCount<=a||0>b||this.moduleCount<=b)throw new Error(a+","+b);return this.modules[a][b]},getModuleCount:function(){return this.moduleCount},make:function(){this.makeImpl(!1,this.getBestMaskPattern())},makeImpl:function(a,c){this.moduleCount=4*this.typeNumber+17,this.modules=new Array(this.moduleCount);for(var d=0;d<this.moduleCount;d++){this.modules[d]=new Array(this.moduleCount);for(var e=0;e<this.moduleCount;e++)this.modules[d][e]=null}this.setupPositionProbePattern(0,0),this.setupPositionProbePattern(this.moduleCount-7,0),this.setupPositionProbePattern(0,this.moduleCount-7),this.setupPositionAdjustPattern(),this.setupTimingPattern(),this.setupTypeInfo(a,c),this.typeNumber>=7&&this.setupTypeNumber(a),null==this.dataCache&&(this.dataCache=b.createData(this.typeNumber,this.errorCorrectLevel,this.dataList)),this.mapData(this.dataCache,c)},setupPositionProbePattern:function(a,b){for(var c=-1;7>=c;c++)if(!(-1>=a+c||this.moduleCount<=a+c))for(var d=-1;7>=d;d++)-1>=b+d||this.moduleCount<=b+d||(this.modules[a+c][b+d]=c>=0&&6>=c&&(0==d||6==d)||d>=0&&6>=d&&(0==c||6==c)||c>=2&&4>=c&&d>=2&&4>=d?!0:!1)},getBestMaskPattern:function(){for(var a=0,b=0,c=0;8>c;c++){this.makeImpl(!0,c);var d=f.getLostPoint(this);(0==c||a>d)&&(a=d,b=c)}return b},createMovieClip:function(a,b,c){var d=a.createEmptyMovieClip(b,c),e=1;this.make();for(var f=0;f<this.modules.length;f++)for(var g=f*e,h=0;h<this.modules[f].length;h++){var i=h*e,j=this.modules[f][h];j&&(d.beginFill(0,100),d.moveTo(i,g),d.lineTo(i+e,g),d.lineTo(i+e,g+e),d.lineTo(i,g+e),d.endFill())}return d},setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a++)null==this.modules[a][6]&&(this.modules[a][6]=0==a%2);for(var b=8;b<this.moduleCount-8;b++)null==this.modules[6][b]&&(this.modules[6][b]=0==b%2)},setupPositionAdjustPattern:function(){for(var a=f.getPatternPosition(this.typeNumber),b=0;b<a.length;b++)for(var c=0;c<a.length;c++){var d=a[b],e=a[c];if(null==this.modules[d][e])for(var g=-2;2>=g;g++)for(var h=-2;2>=h;h++)this.modules[d+g][e+h]=-2==g||2==g||-2==h||2==h||0==g&&0==h?!0:!1}},setupTypeNumber:function(a){for(var b=f.getBCHTypeNumber(this.typeNumber),c=0;18>c;c++){var d=!a&&1==(1&b>>c);this.modules[Math.floor(c/3)][c%3+this.moduleCount-8-3]=d}for(var c=0;18>c;c++){var d=!a&&1==(1&b>>c);this.modules[c%3+this.moduleCount-8-3][Math.floor(c/3)]=d}},setupTypeInfo:function(a,b){for(var c=this.errorCorrectLevel<<3|b,d=f.getBCHTypeInfo(c),e=0;15>e;e++){var g=!a&&1==(1&d>>e);6>e?this.modules[e][8]=g:8>e?this.modules[e+1][8]=g:this.modules[this.moduleCount-15+e][8]=g}for(var e=0;15>e;e++){var g=!a&&1==(1&d>>e);8>e?this.modules[8][this.moduleCount-e-1]=g:9>e?this.modules[8][15-e-1+1]=g:this.modules[8][15-e-1]=g}this.modules[this.moduleCount-8][8]=!a},mapData:function(a,b){for(var c=-1,d=this.moduleCount-1,e=7,g=0,h=this.moduleCount-1;h>0;h-=2)for(6==h&&h--;;){for(var i=0;2>i;i++)if(null==this.modules[d][h-i]){var j=!1;g<a.length&&(j=1==(1&a[g]>>>e));var k=f.getMask(b,d,h-i);k&&(j=!j),this.modules[d][h-i]=j,e--,-1==e&&(g++,e=7)}if(d+=c,0>d||this.moduleCount<=d){d-=c,c=-c;break}}}},b.PAD0=236,b.PAD1=17,b.createData=function(a,c,d){for(var e=j.getRSBlocks(a,c),g=new k,h=0;h<d.length;h++){var i=d[h];g.put(i.mode,4),g.put(i.getLength(),f.getLengthInBits(i.mode,a)),i.write(g)}for(var l=0,h=0;h<e.length;h++)l+=e[h].dataCount;if(g.getLengthInBits()>8*l)throw new Error("code length overflow. ("+g.getLengthInBits()+">"+8*l+")");for(g.getLengthInBits()+4<=8*l&&g.put(0,4);0!=g.getLengthInBits()%8;)g.putBit(!1);for(;;){if(g.getLengthInBits()>=8*l)break;if(g.put(b.PAD0,8),g.getLengthInBits()>=8*l)break;g.put(b.PAD1,8)}return b.createBytes(g,e)},b.createBytes=function(a,b){for(var c=0,d=0,e=0,g=new Array(b.length),h=new Array(b.length),j=0;j<b.length;j++){var k=b[j].dataCount,l=b[j].totalCount-k;d=Math.max(d,k),e=Math.max(e,l),g[j]=new Array(k);for(var m=0;m<g[j].length;m++)g[j][m]=255&a.buffer[m+c];c+=k;var n=f.getErrorCorrectPolynomial(l),o=new i(g[j],n.getLength()-1),p=o.mod(n);h[j]=new Array(n.getLength()-1);for(var m=0;m<h[j].length;m++){var q=m+p.getLength()-h[j].length;h[j][m]=q>=0?p.get(q):0}}for(var r=0,m=0;m<b.length;m++)r+=b[m].totalCount;for(var s=new Array(r),t=0,m=0;d>m;m++)for(var j=0;j<b.length;j++)m<g[j].length&&(s[t++]=g[j][m]);for(var m=0;e>m;m++)for(var j=0;j<b.length;j++)m<h[j].length&&(s[t++]=h[j][m]);return s};for(var c={MODE_NUMBER:1,MODE_ALPHA_NUM:2,MODE_8BIT_BYTE:4,MODE_KANJI:8},d={L:1,M:0,Q:3,H:2},e={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7},f={PATTERN_POSITION_TABLE:[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],G15:1335,G18:7973,G15_MASK:21522,getBCHTypeInfo:function(a){for(var b=a<<10;f.getBCHDigit(b)-f.getBCHDigit(f.G15)>=0;)b^=f.G15<<f.getBCHDigit(b)-f.getBCHDigit(f.G15);return(a<<10|b)^f.G15_MASK},getBCHTypeNumber:function(a){for(var b=a<<12;f.getBCHDigit(b)-f.getBCHDigit(f.G18)>=0;)b^=f.G18<<f.getBCHDigit(b)-f.getBCHDigit(f.G18);return a<<12|b},getBCHDigit:function(a){for(var b=0;0!=a;)b++,a>>>=1;return b},getPatternPosition:function(a){return f.PATTERN_POSITION_TABLE[a-1]},getMask:function(a,b,c){switch(a){case e.PATTERN000:return 0==(b+c)%2;case e.PATTERN001:return 0==b%2;case e.PATTERN010:return 0==c%3;case e.PATTERN011:return 0==(b+c)%3;case e.PATTERN100:return 0==(Math.floor(b/2)+Math.floor(c/3))%2;case e.PATTERN101:return 0==b*c%2+b*c%3;case e.PATTERN110:return 0==(b*c%2+b*c%3)%2;case e.PATTERN111:return 0==(b*c%3+(b+c)%2)%2;default:throw new Error("bad maskPattern:"+a)}},getErrorCorrectPolynomial:function(a){for(var b=new i([1],0),c=0;a>c;c++)b=b.multiply(new i([1,g.gexp(c)],0));return b},getLengthInBits:function(a,b){if(b>=1&&10>b)switch(a){case c.MODE_NUMBER:return 10;case c.MODE_ALPHA_NUM:return 9;case c.MODE_8BIT_BYTE:return 8;case c.MODE_KANJI:return 8;default:throw new Error("mode:"+a)}else if(27>b)switch(a){case c.MODE_NUMBER:return 12;case c.MODE_ALPHA_NUM:return 11;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 10;default:throw new Error("mode:"+a)}else{if(!(41>b))throw new Error("type:"+b);switch(a){case c.MODE_NUMBER:return 14;case c.MODE_ALPHA_NUM:return 13;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 12;default:throw new Error("mode:"+a)}}},getLostPoint:function(a){for(var b=a.getModuleCount(),c=0,d=0;b>d;d++)for(var e=0;b>e;e++){for(var f=0,g=a.isDark(d,e),h=-1;1>=h;h++)if(!(0>d+h||d+h>=b))for(var i=-1;1>=i;i++)0>e+i||e+i>=b||(0!=h||0!=i)&&g==a.isDark(d+h,e+i)&&f++;f>5&&(c+=3+f-5)}for(var d=0;b-1>d;d++)for(var e=0;b-1>e;e++){var j=0;a.isDark(d,e)&&j++,a.isDark(d+1,e)&&j++,a.isDark(d,e+1)&&j++,a.isDark(d+1,e+1)&&j++,(0==j||4==j)&&(c+=3)}for(var d=0;b>d;d++)for(var e=0;b-6>e;e++)a.isDark(d,e)&&!a.isDark(d,e+1)&&a.isDark(d,e+2)&&a.isDark(d,e+3)&&a.isDark(d,e+4)&&!a.isDark(d,e+5)&&a.isDark(d,e+6)&&(c+=40);for(var e=0;b>e;e++)for(var d=0;b-6>d;d++)a.isDark(d,e)&&!a.isDark(d+1,e)&&a.isDark(d+2,e)&&a.isDark(d+3,e)&&a.isDark(d+4,e)&&!a.isDark(d+5,e)&&a.isDark(d+6,e)&&(c+=40);for(var k=0,e=0;b>e;e++)for(var d=0;b>d;d++)a.isDark(d,e)&&k++;var l=Math.abs(100*k/b/b-50)/5;return c+=10*l}},g={glog:function(a){if(1>a)throw new Error("glog("+a+")");return g.LOG_TABLE[a]},gexp:function(a){for(;0>a;)a+=255;for(;a>=256;)a-=255;return g.EXP_TABLE[a]},EXP_TABLE:new Array(256),LOG_TABLE:new Array(256)},h=0;8>h;h++)g.EXP_TABLE[h]=1<<h;for(var h=8;256>h;h++)g.EXP_TABLE[h]=g.EXP_TABLE[h-4]^g.EXP_TABLE[h-5]^g.EXP_TABLE[h-6]^g.EXP_TABLE[h-8];for(var h=0;255>h;h++)g.LOG_TABLE[g.EXP_TABLE[h]]=h;i.prototype={get:function(a){return this.num[a]},getLength:function(){return this.num.length},multiply:function(a){for(var b=new Array(this.getLength()+a.getLength()-1),c=0;c<this.getLength();c++)for(var d=0;d<a.getLength();d++)b[c+d]^=g.gexp(g.glog(this.get(c))+g.glog(a.get(d)));return new i(b,0)},mod:function(a){if(this.getLength()-a.getLength()<0)return this;for(var b=g.glog(this.get(0))-g.glog(a.get(0)),c=new Array(this.getLength()),d=0;d<this.getLength();d++)c[d]=this.get(d);for(var d=0;d<a.getLength();d++)c[d]^=g.gexp(g.glog(a.get(d))+b);return new i(c,0).mod(a)}},j.RS_BLOCK_TABLE=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],j.getRSBlocks=function(a,b){var c=j.getRsBlockTable(a,b);if(void 0==c)throw new Error("bad rs block @ typeNumber:"+a+"/errorCorrectLevel:"+b);for(var d=c.length/3,e=[],f=0;d>f;f++)for(var g=c[3*f+0],h=c[3*f+1],i=c[3*f+2],k=0;g>k;k++)e.push(new j(h,i));return e},j.getRsBlockTable=function(a,b){switch(b){case d.L:return j.RS_BLOCK_TABLE[4*(a-1)+0];case d.M:return j.RS_BLOCK_TABLE[4*(a-1)+1];case d.Q:return j.RS_BLOCK_TABLE[4*(a-1)+2];case d.H:return j.RS_BLOCK_TABLE[4*(a-1)+3];default:return void 0}},k.prototype={get:function(a){var b=Math.floor(a/8);return 1==(1&this.buffer[b]>>>7-a%8)},put:function(a,b){for(var c=0;b>c;c++)this.putBit(1==(1&a>>>b-c-1))},getLengthInBits:function(){return this.length},putBit:function(a){var b=Math.floor(this.length/8);this.buffer.length<=b&&this.buffer.push(0),a&&(this.buffer[b]|=128>>>this.length%8),this.length++}};var l=[[17,14,11,7],[32,26,20,14],[53,42,32,24],[78,62,46,34],[106,84,60,44],[134,106,74,58],[154,122,86,64],[192,152,108,84],[230,180,130,98],[271,213,151,119],[321,251,177,137],[367,287,203,155],[425,331,241,177],[458,362,258,194],[520,412,292,220],[586,450,322,250],[644,504,364,280],[718,560,394,310],[792,624,442,338],[858,666,482,382],[929,711,509,403],[1003,779,565,439],[1091,857,611,461],[1171,911,661,511],[1273,997,715,535],[1367,1059,751,593],[1465,1125,805,625],[1528,1190,868,658],[1628,1264,908,698],[1732,1370,982,742],[1840,1452,1030,790],[1952,1538,1112,842],[2068,1628,1168,898],[2188,1722,1228,958],[2303,1809,1283,983],[2431,1911,1351,1051],[2563,1989,1423,1093],[2699,2099,1499,1139],[2809,2213,1579,1219],[2953,2331,1663,1273]],o=function(){var a=function(a,b){this._el=a,this._htOption=b};return a.prototype.draw=function(a){function g(a,b){var c=document.createElementNS("http://www.w3.org/2000/svg",a);for(var d in b)b.hasOwnProperty(d)&&c.setAttribute(d,b[d]);return c}var b=this._htOption,c=this._el,d=a.getModuleCount();Math.floor(b.width/d),Math.floor(b.height/d),this.clear();var h=g("svg",{viewBox:"0 0 "+String(d)+" "+String(d),width:"100%",height:"100%",fill:b.colorLight});h.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:xlink","http://www.w3.org/1999/xlink"),c.appendChild(h),h.appendChild(g("rect",{fill:b.colorDark,width:"1",height:"1",id:"template"}));for(var i=0;d>i;i++)for(var j=0;d>j;j++)if(a.isDark(i,j)){var k=g("use",{x:String(i),y:String(j)});k.setAttributeNS("http://www.w3.org/1999/xlink","href","#template"),h.appendChild(k)}},a.prototype.clear=function(){for(;this._el.hasChildNodes();)this._el.removeChild(this._el.lastChild)},a}(),p="svg"===document.documentElement.tagName.toLowerCase(),q=p?o:m()?function(){function a(){this._elImage.src=this._elCanvas.toDataURL("image/png"),this._elImage.style.display="block",this._elCanvas.style.display="none"}function d(a,b){var c=this;if(c._fFail=b,c._fSuccess=a,null===c._bSupportDataURI){var d=document.createElement("img"),e=function(){c._bSupportDataURI=!1,c._fFail&&_fFail.call(c)},f=function(){c._bSupportDataURI=!0,c._fSuccess&&c._fSuccess.call(c)};return d.onabort=e,d.onerror=e,d.onload=f,d.src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",void 0}c._bSupportDataURI===!0&&c._fSuccess?c._fSuccess.call(c):c._bSupportDataURI===!1&&c._fFail&&c._fFail.call(c)}if(this._android&&this._android<=2.1){var b=1/window.devicePixelRatio,c=CanvasRenderingContext2D.prototype.drawImage;CanvasRenderingContext2D.prototype.drawImage=function(a,d,e,f,g,h,i,j){if("nodeName"in a&&/img/i.test(a.nodeName))for(var l=arguments.length-1;l>=1;l--)arguments[l]=arguments[l]*b;else"undefined"==typeof j&&(arguments[1]*=b,arguments[2]*=b,arguments[3]*=b,arguments[4]*=b);c.apply(this,arguments)}}var e=function(a,b){this._bIsPainted=!1,this._android=n(),this._htOption=b,this._elCanvas=document.createElement("canvas"),this._elCanvas.width=b.width,this._elCanvas.height=b.height,a.appendChild(this._elCanvas),this._el=a,this._oContext=this._elCanvas.getContext("2d"),this._bIsPainted=!1,this._elImage=document.createElement("img"),this._elImage.style.display="none",this._el.appendChild(this._elImage),this._bSupportDataURI=null};return e.prototype.draw=function(a){var b=this._elImage,c=this._oContext,d=this._htOption,e=a.getModuleCount(),f=d.width/e,g=d.height/e,h=Math.round(f),i=Math.round(g);b.style.display="none",this.clear();for(var j=0;e>j;j++)for(var k=0;e>k;k++){var l=a.isDark(j,k),m=k*f,n=j*g;c.strokeStyle=l?d.colorDark:d.colorLight,c.lineWidth=1,c.fillStyle=l?d.colorDark:d.colorLight,c.fillRect(m,n,f,g),c.strokeRect(Math.floor(m)+.5,Math.floor(n)+.5,h,i),c.strokeRect(Math.ceil(m)-.5,Math.ceil(n)-.5,h,i)}this._bIsPainted=!0},e.prototype.makeImage=function(){this._bIsPainted&&d.call(this,a)},e.prototype.isPainted=function(){return this._bIsPainted},e.prototype.clear=function(){this._oContext.clearRect(0,0,this._elCanvas.width,this._elCanvas.height),this._bIsPainted=!1},e.prototype.round=function(a){return a?Math.floor(1e3*a)/1e3:a},e}():function(){var a=function(a,b){this._el=a,this._htOption=b};return a.prototype.draw=function(a){for(var b=this._htOption,c=this._el,d=a.getModuleCount(),e=Math.floor(b.width/d),f=Math.floor(b.height/d),g=['<table style="border:0;border-collapse:collapse;">'],h=0;d>h;h++){g.push("<tr>");for(var i=0;d>i;i++)g.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:'+e+"px;height:"+f+"px;background-color:"+(a.isDark(h,i)?b.colorDark:b.colorLight)+';"></td>');g.push("</tr>")}g.push("</table>"),c.innerHTML=g.join("");var j=c.childNodes[0],k=(b.width-j.offsetWidth)/2,l=(b.height-j.offsetHeight)/2;k>0&&l>0&&(j.style.margin=l+"px "+k+"px")},a.prototype.clear=function(){this._el.innerHTML=""},a}();QRCode=function(a,b){if(this._htOption={width:256,height:256,typeNumber:4,colorDark:"#000000",colorLight:"#ffffff",correctLevel:d.H},"string"==typeof b&&(b={text:b}),b)for(var c in b)this._htOption[c]=b[c];"string"==typeof a&&(a=document.getElementById(a)),this._android=n(),this._el=a,this._oQRCode=null,this._oDrawing=new q(this._el,this._htOption),this._htOption.text&&this.makeCode(this._htOption.text)},QRCode.prototype.makeCode=function(a){this._oQRCode=new b(r(a,this._htOption.correctLevel),this._htOption.correctLevel),this._oQRCode.addData(a),this._oQRCode.make(),this._el.title=a,this._oDrawing.draw(this._oQRCode),this.makeImage()},QRCode.prototype.makeImage=function(){"function"==typeof this._oDrawing.makeImage&&(!this._android||this._android>=3)&&this._oDrawing.makeImage()},QRCode.prototype.clear=function(){this._oDrawing.clear()},QRCode.CorrectLevel=d}();
+</script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+
+  <style>
+    /* ═══════════ Variables du thème (personnalisables) ═══════════ */
+    :root {
+      --cream:#F7F1E3; --sand:#E4D5B8; --gold:#C9A227; --gold-deep:#8C6D33;
+      --sage:#9CAF88; --blush:#E9D3D1; --ink:#2E2618;
+      --royal:#12362B; --royal-deep:#0B241C;
+      --ease-soft: cubic-bezier(.22,1,.36,1); /* ease-out soigné */
+    }
+
+    html { -webkit-text-size-adjust:100%; }
+    body { background:var(--cream); color:var(--ink); }
+    body.locked { overflow:hidden; height:100vh; }
+
+    /* ── Or massif : texte en dégradé d'or ─────────────────────── */
+    .gold-text {
+      background:linear-gradient(165deg,#F1DC9E 0%,#C9A227 38%,#8C6D33 62%,#E9CF8F 100%);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    /* Titres gravés royaux */
+    .title-royal { font-family:Cinzel,Georgia,serif; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
+
+    /* ── Cadre doré à double filet + coins adinkra ─────────────── */
+    .frame-gold { position:relative; border:1.5px solid #C9A227; box-shadow:inset 0 0 0 4px var(--cream), inset 0 0 0 5.5px rgba(140,109,51,.65), 0 18px 45px -15px rgba(30,24,12,.38); }
+    .frame-gold::before, .frame-gold::after {
+      content:''; position:absolute; width:26px; height:26px; border:1.5px solid #8C6D33; pointer-events:none;
+    }
+    .frame-gold::before { top:6px; left:6px; border-right:none; border-bottom:none; }
+    .frame-gold::after  { bottom:6px; right:6px; border-left:none; border-top:none; }
+
+    /* Arche royale (photo en ogive africaine) */
+    .arch { border-radius:999px 999px 14px 14px / 480px 480px 14px 14px; }
+
+    /* ── Sections « nuit royale » : vert impérial + motifs ─────── */
+    .royal-dark { position:relative; background:linear-gradient(180deg,var(--royal-deep) 0%,var(--royal) 55%,var(--royal-deep) 100%); color:#F3ECD9; }
+    .royal-dark::before {
+      content:''; position:absolute; inset:0; pointer-events:none; opacity:.16;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cg fill='none' stroke='%23C9A227' stroke-width='1.1'%3E%3Ccircle cx='14' cy='14' r='9'/%3E%3Ccircle cx='14' cy='14' r='3' fill='%23C9A227' fill-opacity='.9' stroke='none'/%3E%3Cpath d='M42 5 L49 14 L42 23 L35 14 Z'/%3E%3Cpath d='M42 23 v14'/%3E%3Ccircle cx='14' cy='42' r='2.4' fill='%23C9A227' fill-opacity='.9' stroke='none'/%3E%3Cpath d='M0 35 h10 M18 35 h10 M56 35 h-10 M38 35 h-10'/%3E%3C/g%3E%3C/svg%3E");
+      background-size:56px 56px;
+    }
+    .royal-dark > * { position:relative; }
+
+    /* Section sable ornée de bogolan discret */
+    .bogolan-bg {
+      background-color:var(--cream);
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cg fill='none' stroke='%238C6D33' stroke-opacity='.14' stroke-width='1.2'%3E%3Cpath d='M0 8 h16 l6 -6 6 6 h16'/%3E%3Cpath d='M0 8 v8 M44 8 v8 M8 24 l8 -6 8 6'/%3E%3Cpath d='M48 28 h16 M48 34 h16 M56 22 v18'/%3E%3Ccircle cx='24' cy='48' r='6'/%3E%3Ccircle cx='24' cy='48' r='2' fill='%238C6D33' fill-opacity='.16' stroke='none'/%3E%3Cpath d='M40 52 l6 8 6 -8'/%3E%3C/g%3E%3C/svg%3E");
+      background-size:72px 72px;
+    }
+
+    /* Grain papier subtil sur toute la page */
+    .grain-overlay {
+      position:fixed; inset:0; z-index:80; pointer-events:none; opacity:.045;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── Motifs africains : frise kente + texture wax ───────────── */
+    .kente   { height:11px; width:100%; display:block; }
+    .kente-x2{ height:22px; width:100%; display:block; }
+    .wax-bg  { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Ccircle cx='14' cy='14' r='8' fill='none' stroke='%23C9A961' stroke-opacity='.55' stroke-width='1'/%3E%3Ccircle cx='14' cy='14' r='3' fill='%239CAF88' fill-opacity='.45'/%3E%3Ccircle cx='14' cy='2' r='1.2' fill='%238C6D33' fill-opacity='.4'/%3E%3Ccircle cx='2' cy='14' r='1.2' fill='%238C6D33' fill-opacity='.4'/%3E%3Ccircle cx='26' cy='14' r='1.2' fill='%238C6D33' fill-opacity='.4'/%3E%3Ccircle cx='14' cy='26' r='1.2' fill='%238C6D33' fill-opacity='.4'/%3E%3C/svg%3E"); }
+
+    /* Focus visible AA (navigation clavier) */
+    :focus-visible { outline:2px solid var(--gold-deep); outline-offset:3px; border-radius:4px; }
+
+    /* ── Enveloppe d'intro — motion design ─────────────────────── */
+    .env { position:relative; width:min(82vw,340px); aspect-ratio:10/7; margin:0 auto;
+           filter:drop-shadow(0 22px 34px rgba(11,36,28,.45));
+           perspective:900px; animation:envFloat 5s ease-in-out infinite; }
+    @keyframes envFloat { 0%,100%{ transform:translateY(0) rotateX(3deg) rotateZ(-.5deg) }
+                          50%{ transform:translateY(-8px) rotateX(6deg) rotateZ(.5deg) } }
+    .env-back   { position:absolute; inset:0; border-radius:.5rem; background:linear-gradient(160deg,#1C4A3A,#0B241C); transition:opacity .45s ease; }
+    .env-letter { position:absolute; left:5%; right:5%; top:6%; bottom:6%; z-index:20; border-radius:.35rem;
+                  background:linear-gradient(180deg,#FFFDF6,#F9F3E4); border:1px solid rgba(201,162,39,.45);
+                  transition:transform .8s var(--ease-soft), opacity .5s ease, left .7s var(--ease-soft), top .7s var(--ease-soft), width .7s var(--ease-soft);
+                  will-change:transform; }
+    .env.lift .env-letter { transform:translateY(-128%) scale(1.06); z-index:60; }
+    /* Étape finale : la carte se glisse au centre, agrandie et lisible */
+    .env.zoom { animation:none; }
+    .env.zoom .env-letter { left:50%; top:44%; right:auto; bottom:auto; width:min(86vw,420px); height:auto; aspect-ratio:auto;
+                            padding:1.6rem 1.25rem; transform:translate(-50%,-50%);
+                            box-shadow:0 30px 70px rgba(11,36,28,.55); }
+    .env.zoom .env-back, .env.zoom .env-pocket, .env.zoom .env-flap, .env.zoom .env-seal { opacity:0; }
+    .env-pocket { position:absolute; inset:0; z-index:30; border-radius:.5rem; transition:opacity .45s ease;
+                  clip-path:polygon(0 0,50% 46%,100% 0,100% 100%,0 100%);
+                  background:linear-gradient(180deg,#1C4A3A 0%,#12362B 55%,#0E2C22 100%); }
+    .env-pocket::after { content:''; position:absolute; left:0; right:0; bottom:0; height:12%;
+                  background:repeating-linear-gradient(90deg,#C9A227 0 8px,#9E2B25 8px 12px,#12362B 12px 20px,#E9CF8F 20px 23px); }
+    .env-flap   { position:absolute; top:0; left:0; right:0; height:52%; z-index:40;
+                  clip-path:polygon(0 0,100% 0,50% 100%);
+                  transform-origin:top center; backface-visibility:hidden;
+                  background:linear-gradient(180deg,#1E5040,#12362B);
+                  border-radius:.5rem .5rem 0 0;
+                  transition:transform .7s var(--ease-soft), opacity .7s ease; }
+    .env-flap::after { content:''; position:absolute; inset:0;
+                  background:linear-gradient(180deg,transparent 62%,rgba(201,162,39,.55) 63%,rgba(201,162,39,.55) 74%,transparent 75%); }
+    .env.open .env-flap { transform:rotateX(-165deg); }
+    .env-seal { position:absolute; left:50%; bottom:-4.5%; transform:translateX(-50%); width:64px; height:64px;
+                border-radius:9999px; z-index:50; display:flex; align-items:center; justify-content:center;
+                background:radial-gradient(circle at 32% 30%, #DDBA72, #B28A3A 62%, #8F6A25 100%);
+                box-shadow:0 3px 8px rgba(74,66,56,.35), inset 0 0 0 3px rgba(255,255,255,.14);
+                transition:transform .45s ease, opacity .45s ease; }
+    .env.open .env-seal { transform:translateX(-50%) scale(.75) rotate(8deg); opacity:.92; }
+
+    /* Lignes de la carte : révélées une à une quand la carte se centre */
+    .crd { opacity:1; }
+    .env.zoom .crd { animation:crdIn .6s var(--ease-soft) var(--d,0s) both; }
+    @keyframes crdIn { from{ opacity:0; transform:translateY(16px); filter:blur(4px) } to{ opacity:1; transform:none; filter:blur(0) } }
+    /* Les prénoms : dégradé or animé (brillance qui balaie le texte) */
+    .crd-name { font-size:1.55rem; line-height:1.15; transition:font-size .7s var(--ease-soft); }
+    .env.zoom .crd-name { font-size:clamp(2rem,9vw,3rem);
+      background:linear-gradient(90deg,#8C6D33 0%,#C9A227 25%,#F7E7B0 50%,#C9A227 75%,#8C6D33 100%);
+      background-size:200% auto; -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation:crdIn .6s var(--ease-soft) var(--d,0s) both, nameShine 2.8s linear 1s infinite; }
+    @keyframes nameShine { to { background-position:200% center; } }
+
+    /* Particules dorées : éclat du sceau + poussière d'ambiance */
+    .spark { position:absolute; z-index:70; width:8px; height:8px; border-radius:9999px; pointer-events:none;
+             background:radial-gradient(circle,#F7E7B0,#C9A227 65%,transparent 75%);
+             animation:sparkFly .9s ease-out forwards; }
+    @keyframes sparkFly { to { transform:translate(var(--tx,0),var(--ty,-60px)) scale(.15); opacity:0 } }
+    .gold-dot { position:absolute; bottom:-10px; width:6px; height:6px; border-radius:9999px; pointer-events:none;
+                background:rgba(233,207,143,.85); box-shadow:0 0 6px rgba(201,162,39,.8);
+                animation:dotFloat linear infinite; }
+    @keyframes dotFloat { 0%{ transform:translateY(0); opacity:0 } 10%{ opacity:.9 } 100%{ transform:translateY(-78vh); opacity:0 } }
+
+    /* ── Animations d'apparition (scroll + hero séquencé) ───────── */
+    [data-reveal] { opacity:0; transform:translateY(1.25rem); transition:opacity .6s var(--ease-soft), transform .6s var(--ease-soft); }
+    [data-reveal].revealed { opacity:1; transform:none; }
+    .hero-fade { opacity:0; transform:translateY(1rem); transition:opacity .7s var(--ease-soft), transform .7s var(--ease-soft); }
+    .hero-fade.in { opacity:1; transform:none; }
+
+    /* ── Lecteur musique : onde sonore ──────────────────────────── */
+    .wave span { display:inline-block; width:3px; border-radius:2px; background:var(--gold-deep); height:8px; margin:0 1.5px; transform:scaleY(.4); transform-origin:center; transition:transform .3s ease; }
+    .wave.playing span { animation:waveBounce .9s ease-in-out infinite; }
+    .wave.playing span:nth-child(2){ animation-delay:.12s } .wave.playing span:nth-child(3){ animation-delay:.24s } .wave.playing span:nth-child(4){ animation-delay:.36s }
+    @keyframes waveBounce { 0%,100%{ transform:scaleY(.35) } 50%{ transform:scaleY(1.15) } }
+
+    /* ── Frise du programme : connecteurs alignés au centre des médaillons ── */
+    @media (min-width: 768px) {
+      .timeline > li { position: relative; }
+      /* Segment horizontal entre chaque médaillon et le suivant.
+         Médaillon : 44px (rayon 22px) → la ligne part du bord droit +6px
+         et file sous le médaillon suivant (fond opaque, z-10) qui la masque. */
+      .timeline > li:not(:last-child)::after {
+        content: ''; position: absolute; top: 21px;
+        left: calc(50% + 28px); right: calc(-50% - 4px);
+        height: 1px; background: rgba(201,162,39,.5);
+      }
+    }
+
+    /* ── Cartes glassmorphism légères ───────────────────────────── */
+    .glass { background:rgba(255,253,249,.72); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+             border:1px solid rgba(201,162,39,.35); }
+
+    /* ── Galerie dynamique : cascade au scroll + zoom or ────────── */
+    .gal-item { opacity:0; transform:translateY(24px) scale(.97);
+                transition:opacity .7s var(--ease-soft) var(--gd,0s), transform .7s var(--ease-soft) var(--gd,0s); }
+    .revealed .gal-item { opacity:1; transform:none; }
+    .gallery-item > span:first-child, .gallery-item .gal-img { transition:transform .9s var(--ease-soft), box-shadow .6s ease; }
+    .gallery-item:hover .gal-img, .gallery-item:focus-visible .gal-img { transform:scale(1.08); }
+    .gallery-item:hover > span:first-child { box-shadow:0 18px 44px rgba(201,162,39,.28); }
+
+    /* ── Popovers (calendrier / itinéraire) ─────────────────────── */
+    .popover { transform-origin:top center; transition:opacity .25s ease, transform .25s var(--ease-soft); }
+    /* ── Anti-débordement horizontal : aucun défilement latéral, jamais (mobile) ── */
+    html { overflow-x: clip; }
+    @supports not (overflow: clip) { html { overflow-x: hidden; } }
+
+    .popover.hidden-pop { opacity:0; transform:scale(.96) translateY(-4px); pointer-events:none; }
+
+    /* ── Toasts ─────────────────────────────────────────────────── */
+    .toast { animation:toastIn .35s var(--ease-soft); }
+    .toast.out { opacity:0; transform:translateY(8px); transition:opacity .3s ease, transform .3s ease; }
+    @keyframes toastIn { from{ opacity:0; transform:translateY(10px) } to{ opacity:1; transform:none } }
+
+    /* ── Pulsation douce « Touchez pour ouvrir » ────────────────── */
+    @keyframes floatHint { 0%,100%{ transform:translateY(0); opacity:.75 } 50%{ transform:translateY(4px); opacity:1 } }
+    .hint-float { animation:floatHint 2.4s ease-in-out infinite; }
+
+    /* ── Hauteur stable du compte à rebours (évite le « jump ») ── */
+    .cd-num { font-variant-numeric:tabular-nums; }
+
+    /* ═══════ Accessibility : mouvements réduits ═══════ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+      [data-reveal], .hero-fade { opacity:1 !important; transform:none !important; }
+    }
+  </style>
+</head>
+
+<body class="locked antialiased font-sans overflow-x-hidden">
+
+  <!-- Sofras (bibiothèque SVG) : ornements + motifs africains élégants 🌿 -->
+  <svg style="display:none" aria-hidden="true">
+    <defs>
+      <!-- Frise kente royale : or, vert, rouge, ivoire — bande répétable -->
+      <pattern id="kente" width="48" height="14" patternUnits="userSpaceOnUse">
+        <rect width="48" height="14" fill="#0E2C22"/>
+        <path d="M2 7 L11 0 L20 7 L11 14 Z" fill="#C9A227"/>
+        <path d="M20 7 L27 1 L34 7 L27 13 Z" fill="none" stroke="#9E2B25" stroke-width="1.2"/>
+        <circle cx="40" cy="7" r="2.6" fill="#E9CF8F"/>
+        <circle cx="11" cy="7" r="1.4" fill="#0E2C22"/>
+        <path d="M46 0 v14" stroke="#1C4A3A" stroke-width="1.4"/>
+      </pattern>
+      <!-- Wax print fin : cercles concentriques + grain -->
+      <pattern id="wax" width="28" height="28" patternUnits="userSpaceOnUse">
+        <circle cx="14" cy="14" r="8" fill="none" stroke="#C9A227" stroke-width="1"/>
+        <circle cx="14" cy="14" r="3" fill="#9CAF88"/>
+        <circle cx="14" cy="2" r="1.2" fill="#8C6D33"/>
+        <circle cx="2" cy="14" r="1.2" fill="#8C6D33"/>
+        <circle cx="26" cy="14" r="1.2" fill="#8C6D33"/>
+        <circle cx="14" cy="26" r="1.2" fill="#8C6D33"/>
+      </pattern>
+      <!-- Ankara audacieux : éventails & coquillages (motif de la photo du couple) -->
+      <pattern id="ankara" width="80" height="80" patternUnits="userSpaceOnUse">
+        <rect width="80" height="80" fill="#12362B"/>
+        <g fill="none" stroke="#C9A227" stroke-width="1.6">
+          <path d="M40 12 a28 28 0 0 1 28 28 M40 20 a20 20 0 0 1 20 20 M40 28 a12 12 0 0 1 12 12"/>
+          <path d="M40 68 a28 28 0 0 1 -28 -28 M40 60 a20 20 0 0 1 -20 -20 M40 52 a12 12 0 0 1 -12 -12"/>
+        </g>
+        <circle cx="40" cy="40" r="5" fill="#9E2B25"/>
+        <circle cx="40" cy="40" r="2" fill="#E9CF8F"/>
+        <path d="M0 0 l12 12 M80 0 l-12 12 M0 80 l12 -12 M80 80 l-12 -12" stroke="#E9CF8F" stroke-width="1.2"/>
+        <circle cx="8" cy="72" r="2.6" fill="#C9A227"/><circle cx="72" cy="8" r="2.6" fill="#C9A227"/>
+      </pattern>
+      <!-- Bogolanfini (terre barée) : zigzags & cauris -->
+      <pattern id="bogolan" width="64" height="40" patternUnits="userSpaceOnUse">
+        <rect width="64" height="40" fill="none"/>
+        <path d="M0 10 l8 -8 8 8 8 -8 8 8 8 -8 8 8 8 -8 8 8" fill="none" stroke="#8C6D33" stroke-width="1.3"/>
+        <circle cx="8" cy="26" r="2.2" fill="#8C6D33"/><circle cx="24" cy="26" r="2.2" fill="#9E2B25"/>
+        <circle cx="40" cy="26" r="2.2" fill="#8C6D33"/><circle cx="56" cy="26" r="2.2" fill="#9E2B25"/>
+        <path d="M0 36 h64" stroke="#C9A227" stroke-width="1" stroke-dasharray="6 4"/>
+      </pattern>
+    </defs>
+
+    <!-- Symboles royaux : couronne & dwennimmen (bélier — force humble) -->
+    <symbol id="crown" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 32 L4 10 L18 20 L32 6 L46 20 L60 10 L58 32 Z"/>
+      <path d="M10 37 h44" stroke-width="2.4"/>
+      <circle cx="4" cy="8" r="2.6" fill="currentColor" stroke="none"/>
+      <circle cx="32" cy="4" r="2.6" fill="currentColor" stroke="none"/>
+      <circle cx="60" cy="8" r="2.6" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="dwennimmen" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M50 12 a38 38 0 1 1 -38 38"/>
+      <path d="M50 26 a24 24 0 1 1 -24 24"/>
+      <path d="M50 40 a10 10 0 1 1 -10 10"/>
+      <circle cx="50" cy="50" r="3" fill="currentColor" stroke="none"/>
+    </symbol>
+
+    <symbol id="orn" viewBox="0 0 220 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <path d="M6 14 C 40 2, 78 26, 100 14" /><path d="M6 14 C 40 26, 78 2, 100 14" opacity=".55"/>
+      <path d="M214 14 C 180 2, 142 26, 120 14" /><path d="M214 14 C 180 26, 142 2, 120 14" opacity=".55"/>
+      <path d="M110 8 L115 14 L110 20 L105 14 Z" fill="currentColor" stroke="none"/>
+      <circle cx="94" cy="14" r="1.6" fill="currentColor" stroke="none"/><circle cx="126" cy="14" r="1.6" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 20 A7 7 0 0 1 4 13 A 12 12 0 0 1 20 4 A 12 12 0 0 1 20 20 A 7 7 0 0 1 11 20 Z"/>
+      <path d="M12 20 C 12 16, 14 12, 17 8"/>
+    </symbol>
+    <!-- Feuille cauri stylisée : médailon africain autour d'un cercle -->
+    <symbol id="medaillon" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <circle cx="60" cy="60" r="44"/>
+      <g>
+        <circle cx="60" cy="8" r="5"/><circle cx="60" cy="112" r="5"/>
+        <circle cx="8" cy="60" r="5"/><circle cx="112" cy="60" r="5"/>
+        <circle cx="23" cy="23" r="4"/><circle cx="97" cy="23" r="4"/>
+        <circle cx="23" cy="97" r="4"/><circle cx="97" cy="97" r="4"/>
+      </g>
+      <path d="M60 38 L74 60 L60 82 L46 60 Z"/>
+      <circle cx="60" cy="60" r="5" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- Façade coloniale de Grand-Bassam : balcons, volets, arcs -->
+    <symbol id="bassam" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="40" y="30" width="120" height="140" rx="3"/>
+      <path d="M40 58 H160 M40 104 H160"/>
+      <path d="M100 30 V58 M100 58 V104"/>
+      <rect x="52" y="94" width="96" height="10" opacity=".7"/>
+      <path d="M56 66 v28 M72 66 v28" stroke-width="1.2"/>
+      <path d="M56 94 l6 -10 6 10 M112 94 l6 -10 6 10" stroke-width="1.2"/>
+      <path d="M70 58 h28 v36 h-28 Z" stroke-width="1.2"/>
+      <path d="M126 58 h28 v36 h-28 Z" stroke-width="1.2"/>
+      <path d="M86 132 a14 16 0 0 1 28 0 v38 h-28 Z" stroke-width="1.2"/>
+      <path d="M46 170 h108 M30 170 c10 -6 14 -12 16 -18 M170 170 c-10 -6 -14 -12 -16 -18"/>
+    </symbol>
+    <!-- Tenues de soirée : robe de mariée & costume-chemise -->
+    <symbol id="tenues" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M62 44 a14 14 0 0 1 24 0 l30 12 -12 22 c10 26 6 56 -2 74 h-36 c-8 -18 -12 -48 -2 -74 Z" opacity=".95"/>
+      <path d="M74 152 c14 6 34 6 48 0" stroke-width="1.2"/>
+      <circle cx="86" cy="56" r="1.4" fill="currentColor" stroke="none"/><circle cx="96" cy="66" r="1.4" fill="currentColor" stroke="none"/><circle cx="82" cy="74" r="1.4" fill="currentColor" stroke="none"/>
+      <path d="M134 42 l20 12 L146 84 l10 66 c-4 6 -22 6 -26 0 l8 -66 L128 62 Z" opacity=".9"/>
+      <path d="M134 42 l6 6 10 -6 8 8" stroke-width="1.2"/>
+      <path d="M144 84 l-4 20" stroke-width="1.2"/>
+    </symbol>
+    <!-- Étoffes wax drapées -->
+    <symbol id="waxdrap" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M30 30 q40 34 0 68 q-14 40 10 72" opacity=".9"/>
+      <path d="M100 24 q46 30 12 66 q-18 44 14 78" opacity=".75"/>
+      <path d="M168 28 q-42 32 -8 70 q16 40 -12 72" opacity=".9"/>
+      <circle cx="62" cy="96" r="7"/><circle cx="62" cy="96" r="2.4" fill="currentColor" stroke="none"/>
+      <circle cx="128" cy="130" r="7"/><circle cx="128" cy="130" r="2.4" fill="currentColor" stroke="none"/>
+      <path d="M118 62 l8 8 m0 -8 l-8 8" stroke-width="1.2"/>
+      <path d="M46 152 l8 8 m0 -8 l-8 8" stroke-width="1.2"/>
+    </symbol>
+  </svg>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       1️⃣  INTRO — Enveloppe scellée animée (plein écran)
+       ════════════════════════════════════════════════════════════════ -->
+  <div id="intro-overlay" class="fixed inset-0 z-[100] overflow-hidden flex flex-col items-center justify-center px-4 transition-opacity duration-700 royal-dark"
+        role="dialog" aria-modal="true" aria-label="Invitation scellée — touchez pour ouvrir">
+    <svg class="hero-fade w-28 h-4 text-gold mb-5" aria-hidden="true" data-hero="__d100"><use href="#orn"/></svg>
+    <p class="hero-fade serif italic text-gold text-lg mb-8 tracking-wide" data-hero="__d200">— Notre plus belle nouvelle —</p>
+
+    <button id="envelope-btn" class="hero-fade group relative block cursor-pointer" data-hero="__d400"
+            aria-label="Ouvrir l'enveloppe d'invitation">
+      <div class="env" id="envelope">
+        <div class="env-back"></div>
+        <!-- Carte glissée dans l'enveloppe — révélée ligne à ligne à l'ouverture -->
+        <div class="env-letter flex flex-col items-center justify-center text-center">
+          <svg class="crd w-24 h-4 text-gold-deep/70" style="--d:.1s" aria-hidden="true"><use href="#orn"/></svg>
+          <p class="crd font-serif text-2xl text-ink mt-2 leading-tight" style="--d:.25s">Vous êtes invité·e au<br/>mariage civil de</p>
+          <p class="crd crd-name font-display text-gold-deep mt-1 tracking-wide" style="--d:.5s" id="intro-couple">Diane &amp; Amon</p>
+          <p class="crd text-[11px] uppercase tracking-[.3em] text-ink/50 mt-2 cfg-date" style="--d:.75s">Vendredi 4 décembre 2026</p>
+          <p class="crd text-[10px] uppercase tracking-[.2em] text-ink/45 mt-1.5" style="--d:.9s">Mairie de Port-Bouët · Abidjan</p>
+        </div>
+        <div class="env-pocket"></div>
+        <div class="env-flap"></div>
+        <!-- Cachet de cire — initiales des mariés -->
+        <div class="env-seal">
+          <span class="font-serif italic text-xl text-[#FFF7E6] select-none" id="seal-initials">D&nbsp;&&nbsp;A</span>
+        </div>
+      </div>
+    </button>
+
+    <p id="open-hint" class="hero-fade mt-9 text-xs uppercase tracking-[.35em] text-gold/90 hint-float" data-hero="__d600">
+      Touchez pour ouvrir
+    </p>
+  </div>
+
+  <!-- ───────────────────── CONTENU PRINCIPAL ─────────────────────── -->
+  <main id="main" class="relative">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         3️⃣  HERO — En-tête
+         ══════════════════════════════════════════════════════════════ -->
+    <!-- 3️⃣ HERO — En-tête -->
+    <header class="relative royal-dark px-4 pt-20 pb-24 md:pt-28 text-center overflow-hidden">
+      <!-- Lueur dorée au sommet -->
+      <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[42rem] h-[42rem] rounded-full opacity-25 blur-3xl" style="background:radial-gradient(circle,#C9A227 0%,transparent 65%)" aria-hidden="true"></div>
+
+      <!-- Double frise kente en tête de page -->
+      <div class="absolute top-0 left-0 right-0" aria-hidden="true">
+        <svg class="kente-x2"><rect width="100%" height="100%" fill="url(#kente)"/></svg>
+        <div class="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+      </div>
+
+      <div class="relative max-w-3xl mx-auto">
+
+        <!-- 📸 Photo royale — arche africaine, cadre or à double filet -->
+        <figure class="hero-fade mx-auto max-w-md frame-gold p-2.5 bg-[#0E2C22]/60" data-hero="__d0">
+          <div class="relative arch overflow-hidden border border-gold/60">
+            <img src="assets/tradition-trone.jpeg" alt="Diane et Amon lors de leur cérémonie coutumière, parés de kente orange, d'or et de perles"
+                 width="1080" height="720" fetchpriority="high" decoding="async"
+                 class="w-full aspect-[4/3] object-cover" />
+            <figcaption class="absolute inset-x-0 bottom-0 px-4 pb-3 pt-10 text-center font-serif italic text-sm text-white/95"
+                        style="background:linear-gradient(to top,rgba(11,36,28,.85),transparent)">
+              Notre cérémonie coutumière — en kente &amp; or 🧡
+            </figcaption>
+            <!-- Coins adinkra -->
+            <svg class="absolute top-2 left-2 w-8 h-8 text-gold/90" aria-hidden="true"><use href="#dwennimmen"/></svg>
+            <svg class="absolute top-2 right-2 w-8 h-8 text-gold/90" aria-hidden="true" style="transform:scaleX(-1)"><use href="#dwennimmen"/></svg>
+          </div>
+        </figure>
+
+        <!-- Alliance des cœurs & signature du couple -->
+        <div class="hero-fade mx-auto -mt-8 relative z-10 flex flex-col items-center" data-hero="__d100">
+          <span class="w-14 h-14 rounded-full bg-royal-deep border border-gold/60 flex items-center justify-center shadow-glow"><i data-lucide="heart" class="w-6 h-6 text-gold" aria-hidden="true"></i></span>
+          <p class="font-display text-[11px] tracking-[.55em] text-gold/90 uppercase mt-2 pl-2">Deux cœurs, un seul oui</p>
+        </div>
+
+        <svg class="hero-fade w-40 h-5 text-gold mx-auto mt-4" aria-hidden="true" data-hero="__d150"><use href="#orn"/></svg>
+
+        <h1 class="hero-fade mt-4" data-hero="__d300">
+          <span class="block font-display gold-text text-5xl sm:text-7xl md:text-8xl tracking-[.04em]" id="hero-name1">Diane</span>
+          <span class="block font-serif italic text-3xl sm:text-5xl text-cream/80 my-1">&</span>
+          <span class="block font-display gold-text text-5xl sm:text-7xl md:text-8xl tracking-[.04em]" id="hero-name2">Amon</span>
+        </h1>
+
+        <p class="hero-fade font-serif italic text-xl sm:text-2xl text-cream/90 mt-6" data-hero="__d450">
+          Bienvenue à la célébration de notre amour
+        </p>
+        <p class="hero-fade text-xs uppercase tracking-[.4em] text-gold mt-4 cfg-date" data-hero="__d500">Vendredi 4 décembre 2026</p>
+
+        <a href="#rsvp" class="hero-fade inline-flex items-center gap-2 mt-8 px-8 py-3.5 rounded-full border border-gold/70 text-gold font-display text-xs uppercase tracking-[.25em] hover:bg-gold hover:text-royal-deep shadow-glow transition-all duration-500" data-hero="__d650">
+          <i data-lucide="heart" class="w-4 h-4" aria-hidden="true"></i> Confirmer ma présence
+        </a>
+      </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         4️⃣  DATE & COMPTE À REBOURS
+         ══════════════════════════════════════════════════════════════ -->
+    <section id="date" class="px-4 py-16 md:py-24 bogolan-bg" aria-labelledby="date-title">
+      <div class="max-w-3xl mx-auto text-center" data-reveal>
+        <h2 id="date-title" class="title-royal text-2xl md:text-4xl text-royal">Réservez le grand jour</h2>
+        <svg class="w-36 h-4 text-gold mx-auto mt-3" aria-hidden="true"><use href="#orn"/></svg>
+        <p id="date-long" class="mt-5 text-lg text-ink/80 font-medium">[Date et Heure]</p>
+
+        <!-- Compte à rebours live (mis à jour chaque seconde) -->
+        <div id="countdown" class="mt-8 grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto" role="timer" aria-label="Compte à rebours avant le mariage">
+          <!-- Médaillons royaux : nuit & or -->
+          <div class="rounded-2xl py-4 bg-royal text-gold shadow-lift border border-gold/40"><span class="cd-num block font-display text-3xl md:text-4xl gold-text" id="cd-days">–</span><span class="text-[10px] sm:text-xs uppercase tracking-widest text-cream/75 mt-1 block">Jours</span></div>
+          <div class="rounded-2xl py-4 bg-royal text-gold shadow-lift border border-gold/40"><span class="cd-num block font-display text-3xl md:text-4xl gold-text" id="cd-hours">–</span><span class="text-[10px] sm:text-xs uppercase tracking-widest text-cream/75 mt-1 block">Heures</span></div>
+          <div class="rounded-2xl py-4 bg-royal text-gold shadow-lift border border-gold/40"><span class="cd-num block font-display text-3xl md:text-4xl gold-text" id="cd-mins">–</span><span class="text-[10px] sm:text-xs uppercase tracking-widest text-cream/75 mt-1 block">Minutes</span></div>
+          <div class="rounded-2xl py-4 bg-royal text-gold shadow-lift border border-gold/40"><span class="cd-num block font-display text-3xl md:text-4xl gold-text" id="cd-secs">–</span><span class="text-[10px] sm:text-xs uppercase tracking-widest text-cream/75 mt-1 block">Secondes</span></div>
+        </div>
+        <!-- Synthèse lue par les lecteurs d'écran toutes les minutes (pas plusieurs fois/seconde) -->
+        <p class="sr-only" aria-live="polite" id="countdown-live"></p>
+
+        <!-- ☁️ Bouton calendrier + popover 3 options -->
+        <div class="relative inline-block mt-8" data-pop>
+          <button data-pop-btn aria-haspopup="true" aria-expanded="false"
+                  class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gold-deep text-white text-sm font-semibold shadow-soft hover:bg-[#7a5f2b] transition-colors duration-300">
+            <i data-lucide="calendar-plus" class="w-4 h-4" aria-hidden="true"></i> Ajouter à mon calendrier
+          </button>
+          <div data-pop-menu class="popover hidden-pop absolute left-1/2 -translate-x-1/2 mt-2 w-64 glass rounded-2xl shadow-lift p-2 z-30" role="menu" aria-label="Choisir un agenda">
+            <button data-cal="google" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="calendar-plus" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Google Agenda</button>
+            <button data-cal="ics" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="download" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Apple / fichier .ics</button>
+            <button data-cal="outlook" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="external-link" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Outlook</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         5️⃣  PROGRAMME — Timeline  ⚠️ horaires modifiables dans le HTML
+         ══════════════════════════════════════════════════════════════ -->
+    <section id="programme" class="px-4 py-16 md:py-24 royal-dark" aria-labelledby="prog-title">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 id="prog-title" class="title-royal text-2xl md:text-4xl gold-text" data-reveal>Le programme de la journée</h2>
+        <svg class="w-36 h-4 text-gold mx-auto mt-3" aria-hidden="true" data-reveal><use href="#orn"/></svg>
+
+        <div class="relative mt-14 text-left">
+          <!-- Ligne de frise : verticale (mobile) → horizontale (desktop, dessinée entre les médaillons) -->
+          <span class="absolute left-[21px] top-2 bottom-2 w-px bg-gold/50 md:hidden" aria-hidden="true"></span>
+
+          <ol class="timeline md:grid md:grid-cols-3 md:gap-6 space-y-8 md:space-y-0">
+            <!-- Étape 1 · Cérémonie civile -->
+            <li class="flex gap-5 items-start md:flex-col md:items-center md:text-center" data-reveal>
+              <span class="relative z-10 shrink-0 w-11 h-11 rounded-full bg-royal-deep border border-gold/60 flex items-center justify-center shadow-glow"><i data-lucide="landmark" class="w-5 h-5 text-gold" aria-hidden="true"></i></span>
+              <div class="md:w-full"><time class="text-xs font-bold tracking-widest text-gold uppercase">12h00</time><h3 class="font-display text-xl text-cream mt-1">Cérémonie civile</h3><p class="text-sm text-cream/70 mt-2 leading-relaxed">« Oui » officiel à la <strong class="text-gold/95">Mairie de Port-Bouët</strong>, Abidjan.</p></div>
+            </li>
+            <!-- Étape 2 · Cocktail -->
+            <li class="flex gap-5 items-start md:flex-col md:items-center md:text-center" data-reveal>
+              <span class="relative z-10 shrink-0 w-11 h-11 rounded-full bg-royal-deep border border-gold/60 flex items-center justify-center shadow-glow"><i data-lucide="martini" class="w-5 h-5 text-gold" aria-hidden="true"></i></span>
+              <div class="md:w-full"><time class="text-xs font-bold tracking-widest text-gold uppercase">14h00</time><h3 class="font-display text-xl text-cream mt-1">Cocktail</h3><p class="text-sm text-cream/70 mt-2 leading-relaxed">Accueil des invités sur le <strong class="text-gold/95">lieu de réception</strong>, rafraîchissements et retrouvailles.</p></div>
+            </li>
+            <!-- Étape 3 · Réception & honneurs -->
+            <li class="flex gap-5 items-start md:flex-col md:items-center md:text-center" data-reveal>
+              <span class="relative z-10 shrink-0 w-11 h-11 rounded-full bg-royal-deep border border-gold/60 flex items-center justify-center shadow-glow"><i data-lucide="heart-handshake" class="w-5 h-5 text-gold" aria-hidden="true"></i></span>
+              <div class="md:w-full"><time class="text-xs font-bold tracking-widest text-gold uppercase">15h00</time><h3 class="font-display text-xl text-cream mt-1">Réception</h3><p class="text-sm text-cream/70 mt-2 leading-relaxed">Honneurs, joie et famille au <strong class="text-gold/95">Pieu de Grand-Bassam</strong>.</p></div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         6️⃣  LIEUX & ITINÉRAIRES — deux étapes de la journée
+         ══════════════════════════════════════════════════════════════ -->
+    <section id="lieu" class="px-4 py-16 md:py-24" aria-labelledby="lieu-title">
+      <div class="max-w-4xl mx-auto text-center" data-reveal>
+        <h2 id="lieu-title" class="title-royal text-2xl md:text-4xl text-royal">Les lieux du grand jour</h2>
+        <svg class="w-36 h-4 text-gold mx-auto mt-3" aria-hidden="true"><use href="#orn"/></svg>
+
+        <div class="mt-10 grid md:grid-cols-2 gap-6 text-left">
+          <!-- Lieu 1 · Cérémonie civile — Mairie de Port-Bouët -->
+          <article class="data-venue glass rounded-3xl p-6 sm:p-8 shadow-soft border-2 border-gold/40" data-venue-key="civil" data-venue-name="Mairie de Port-Bouët, Abidjan, Côte d'Ivoire">
+            <div class="flex items-center gap-4">
+              <span class="w-12 h-12 rounded-full bg-gold/15 flex items-center justify-center shrink-0"><i data-lucide="landmark" class="w-6 h-6 text-gold-deep" aria-hidden="true"></i></span>
+              <div><p class="text-xs uppercase tracking-[.25em] text-sageDeep font-bold">Cérémonie civile · 12h00</p><h3 class="font-serif text-2xl text-ink">Mairie de Port-Bouët</h3></div>
+            </div>
+            <p class="mt-4 text-ink/70 text-sm leading-relaxed">Abidjan — Port-Bouët. Arrivez 15 minutes en avance pour le partage des alliances et des sourires 💍</p>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <div class="relative inline-block" data-pop>
+                <button data-pop-btn aria-haspopup="true" aria-expanded="false" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold-deep text-white text-sm font-semibold shadow-soft hover:bg-[#7a5f2b] transition-colors duration-300">
+                  <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i> Itinéraire
+                </button>
+                <div data-pop-menu class="popover hidden-pop absolute left-1/2 -translate-x-1/2 mt-2 w-60 glass rounded-2xl shadow-lift p-2 z-30" role="menu" aria-label="Choisir une application d'itinéraire">
+                  <button data-map="google" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="map-pin" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Google Maps <span data-reco="google" class="hidden ml-auto text-[10px] font-bold uppercase tracking-wider text-sageDeep"></span></button>
+                  <button data-map="apple" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="map-pin" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Apple Plans <span data-reco="apple" class="hidden ml-auto text-[10px] font-bold uppercase tracking-wider text-sageDeep"></span></button>
+                  <button data-map="waze" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="map-pin" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Waze</button>
+                  <button data-map="lieu" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="heart" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Voir le lieu épinglé par les mariés</button>
+                </div>
+              </div>
+              <button class="copy-addr inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-gold/40 text-gold-deep text-sm font-semibold hover:bg-gold/10 transition-colors">
+                <i data-lucide="copy" class="w-4 h-4" aria-hidden="true"></i> Copier l'adresse
+              </button>
+            </div>
+          </article>
+
+          <!-- Lieu 2 · Réception — Pieu de Grand-Bassam -->
+          <article class="data-venue glass rounded-3xl p-6 sm:p-8 shadow-soft border-2 border-gold/40" data-venue-key="reception" data-venue-name="Pieu de Grand-Bassam, Église de Jésus-Christ des saints des derniers jours, Grand-Bassam, Côte d'Ivoire">
+            <div class="flex items-center gap-4">
+              <span class="w-12 h-12 rounded-full bg-sage/25 flex items-center justify-center shrink-0"><i data-lucide="heart-handshake" class="w-6 h-6 text-sageDeep" aria-hidden="true"></i></span>
+              <div><p class="text-xs uppercase tracking-[.25em] text-sageDeep font-bold">Cocktail 14h00 · Réception 15h00</p><h3 class="font-serif text-2xl text-ink">Pieu de Grand-Bassam</h3></div>
+            </div>
+            <p class="mt-4 text-ink/70 text-sm leading-relaxed">Cocktail dès 14h00, réception à 15h00 — salle du Pieu de l'Église de Jésus-Christ des saints des derniers jours, Grand-Bassam. Suivez les guirlandes et la musique&nbsp;!</p>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <div class="relative inline-block" data-pop>
+                <button data-pop-btn aria-haspopup="true" aria-expanded="false" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold-deep text-white text-sm font-semibold shadow-soft hover:bg-[#7a5f2b] transition-colors duration-300">
+                  <i data-lucide="navigation" class="w-4 h-4" aria-hidden="true"></i> Itinéraire
+                </button>
+                <div data-pop-menu class="popover hidden-pop absolute left-1/2 -translate-x-1/2 mt-2 w-60 glass rounded-2xl shadow-lift p-2 z-30" role="menu" aria-label="Choisir une application d'itinéraire">
+                  <button data-map="google" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="map-pin" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Google Maps <span data-reco="google" class="hidden ml-auto text-[10px] font-bold uppercase tracking-wider text-sageDeep"></span></button>
+                  <button data-map="apple" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="map-pin" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Apple Plans <span data-reco="apple" class="hidden ml-auto text-[10px] font-bold uppercase tracking-wider text-sageDeep"></span></button>
+                  <button data-map="waze" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="map-pin" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Waze</button>
+                  <button data-map="lieu" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-ink hover:bg-gold/10 transition-colors text-left" role="menuitem"><i data-lucide="heart" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i> Voir le lieu épinglé par les mariés</button>
+                </div>
+              </div>
+              <button class="copy-addr inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-gold/40 text-gold-deep text-sm font-semibold hover:bg-gold/10 transition-colors">
+                <i data-lucide="copy" class="w-4 h-4" aria-hidden="true"></i> Copier l'adresse
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <!-- Carte centrée sur les deux lieux (coordonnées exactes) — lazy -->
+        <div class="mt-8 rounded-2xl overflow-hidden shadow-lift border border-gold/30 max-w-2xl mx-auto">
+          <iframe title="Carte : Mairie de Port-Bouët → Pieu de Grand-Bassam" loading="lazy" class="w-full h-64 sm:h-80 border-0"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  src="https://maps.google.com/maps?saddr=5.2593243,-3.9650464&daddr=5.2148346,-3.7388405&output=embed&hl=fr"></iframe>
+        </div>
+        <p class="mt-3 text-xs text-ink/45 italic font-serif">Épinglé : la Mairie de Port-Bouët — Grand-Bassam, ancienne capitale coloniale classée à l'UNESCO, se trouve à 45 min à l'est par la route d'Abidjan.</p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         7️⃣  DRESS CODE & THÈME
+         ══════════════════════════════════════════════════════════════ -->
+    <section id="dresscode" class="px-4 py-16 md:py-24 bogolan-bg" aria-labelledby="dress-title">
+      <div class="max-w-3xl mx-auto text-center" data-reveal>
+        <h2 id="dress-title" class="title-royal text-2xl md:text-4xl text-royal">Dress code &amp; thème</h2>
+        <svg class="w-36 h-4 text-gold mx-auto mt-3" aria-hidden="true"><use href="#orn"/></svg>
+        <p class="mt-5 text-ink/75 leading-relaxed max-w-xl mx-auto">
+          Nous vous attendons en <strong class="text-gold-deep">tenue de soirée</strong> : éclat et élégance exigés&nbsp;!
+          Messieurs, costume sombre ou smoking ; Mesdames, robe de soirée ou boubou brodé.
+          Des touches d'or champagne ou de vert émeraude sont les bienvenues — et le blanc reste réservé à la mariée 👑
+        </p>
+
+        <!-- Palette de couleurs interactives (pastilles + tooltip) -->
+        <div class="mt-10 flex flex-wrap justify-center gap-5" role="group" aria-label="Palette de couleurs suggérée">
+          <div class="group relative"><button class="w-12 h-12 rounded-full border-2 border-white shadow-soft ring-1 ring-gold/40 hover:scale-110 transition-transform" style="background:linear-gradient(140deg,#E9CF8F,#8C6D33)" aria-label="Couleur suggérée : or champagne"></button><span class="hidden md:block pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-lg bg-ink text-cream text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">Or champagne</span></div>
+          <div class="group relative"><button class="w-12 h-12 rounded-full border-2 border-white shadow-soft ring-1 ring-gold/40 hover:scale-110 transition-transform" style="background:#12362B" aria-label="Couleur suggérée : vert impérial"></button><span class="hidden md:block pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-lg bg-ink text-cream text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">Vert impérial</span></div>
+          <div class="group relative"><button class="w-12 h-12 rounded-full border-2 border-white shadow-soft ring-1 ring-gold/40 hover:scale-110 transition-transform" style="background:#9E2B25" aria-label="Couleur suggérée : rouge kente"></button><span class="hidden md:block pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-lg bg-ink text-cream text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">Rouge kente</span></div>
+          <div class="group relative"><button class="w-12 h-12 rounded-full border-2 border-white shadow-soft ring-1 ring-gold/40 hover:scale-110 transition-transform" style="background:#1C160E" aria-label="Couleur suggérée : noir roi"></button><span class="hidden md:block pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-lg bg-ink text-cream text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">Noir profond</span></div>
+          <div class="group relative"><button class="w-12 h-12 rounded-full border-2 border-white shadow-soft ring-1 ring-gold/40 hover:scale-110 transition-transform" style="background:#F7F1E3" aria-label="Couleur suggérée : ivoire"></button><span class="hidden md:block pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1 rounded-lg bg-ink text-cream text-[11px] font-medium opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">Ivoire · réservé à la mariée</span></div>
+        </div>
+
+        <!-- Galerie moderne — mosaïque dynamique, légendes, révélation en cascade -->
+        <ul id="gallery-grid" data-reveal class="mt-12 grid grid-cols-2 sm:grid-cols-4 sm:grid-auto-rows-[9.5rem] gap-3 sm:gap-4 max-w-3xl mx-auto">
+          <li class="gal-item sm:col-span-2 sm:row-span-2" style="--gd:0s">
+            <button class="gallery-item group relative block w-full h-full" data-caption="Nos familles, unies dans les couleurs du wax ✨" aria-label="Agrandir : le couple et leurs proches">
+              <span class="block relative aspect-[16/9] sm:aspect-auto sm:h-full rounded-2xl border border-gold/30 shadow-soft overflow-hidden">
+                <img src="assets/couple-hero.jpeg" alt="Diane et Amon entourés de leurs proches en tenues wax et kente colorées lors de la cérémonie coutumière" loading="lazy" decoding="async" class="gal-img w-full h-full object-cover" />
+              </span>
+              <span class="gal-cap absolute inset-x-0 bottom-0 px-4 pb-3 pt-10 text-left font-serif italic text-sm text-white/95 sm:opacity-0 sm:translate-y-2 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500" style="background:linear-gradient(to top,rgba(11,36,28,.85),transparent)">Nos familles, unies dans les couleurs du wax ✨</span>
+            </button>
+          </li>
+          <li class="gal-item" style="--gd:.06s">
+            <button class="gallery-item group relative block w-full h-full" data-caption="Front contre front — notre plus beau oui 💛" aria-label="Agrandir : Diane et Amon front contre front">
+              <span class="block relative aspect-square sm:aspect-auto sm:h-full rounded-2xl border border-gold/30 shadow-soft overflow-hidden">
+                <img src="assets/tradition-amour.jpeg" alt="Diane et Amon, front contre front, souriants en parures de kente orange et or, colliers de perles dorées" loading="lazy" decoding="async" class="gal-img w-full h-full object-[50%_15%]" />
+              </span>
+              <span class="gal-cap absolute inset-x-0 bottom-0 px-3 pb-2.5 pt-8 text-left font-serif italic text-xs text-white/95 sm:opacity-0 sm:translate-y-2 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500" style="background:linear-gradient(to top,rgba(11,36,28,.85),transparent)">Front contre front 💛</span>
+            </button>
+          </li>
+          <li class="gal-item" style="--gd:.12s">
+            <button class="gallery-item group relative block w-full h-full" data-caption="La mariée, parée d'or 👑" aria-label="Agrandir : portrait de la mariée">
+              <span class="block relative aspect-square sm:aspect-auto sm:h-full rounded-2xl border border-gold/30 shadow-soft overflow-hidden">
+                <img src="assets/la-mariee.jpeg" alt="Portrait de Diane, chignon tressé orné d'or, collier de perles dorées et étole brodée multicolore" loading="lazy" decoding="async" class="gal-img w-full h-full object-cover" />
+              </span>
+              <span class="gal-cap absolute inset-x-0 bottom-0 px-3 pb-2.5 pt-8 text-left font-serif italic text-xs text-white/95 sm:opacity-0 sm:translate-y-2 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500" style="background:linear-gradient(to top,rgba(11,36,28,.85),transparent)">La mariée, parée d'or 👑</span>
+            </button>
+          </li>
+          <li class="gal-item" style="--gd:.18s">
+            <button class="gallery-item group relative block w-full h-full" data-caption="Diane &amp; Amon — devant la bannière de la coutume 🧡" aria-label="Agrandir : Diane et Amon en tenue coutumière">
+              <span class="block relative aspect-square sm:aspect-auto sm:h-full rounded-2xl border border-gold/30 shadow-soft overflow-hidden">
+                <img src="assets/ceremonie-1.jpg" alt="Diane et Amon souriants devant la bannière de leur cérémonie coutumière" loading="lazy" decoding="async" class="gal-img w-full h-full object-cover" />
+              </span>
+              <span class="gal-cap absolute inset-x-0 bottom-0 px-3 pb-2.5 pt-8 text-left font-serif italic text-xs text-white/95 sm:opacity-0 sm:translate-y-2 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-500" style="background:linear-gradient(to top,rgba(11,36,28,.85),transparent)">Devant la bannière 🧡</span>
+            </button>
+          </li>
+          <li class="gal-item sm:col-span-2" style="--gd:.24s">
+            <div class="w-full h-full min-h-[7rem] rounded-2xl border border-dashed border-gold/50 bg-gold/5 flex flex-col items-center justify-center text-center p-4 gap-2" aria-hidden="true">
+              <i data-lucide="camera" class="w-6 h-6 text-gold-deep"></i>
+              <p class="text-xs text-ink/60 font-serif italic leading-relaxed">Le 4 décembre, ces images seront les vôtres — partagez-les avec <strong class="text-gold-deep not-italic">#Diane&amp;Amon</strong> 📸</p>
+            </div>
+          </li>
+        </ul>
+        <p class="mt-3 text-xs text-ink/50 italic font-serif">✧ Touchez une photo pour l'agrandir — quelques souvenirs de notre cérémonie coutumière.</p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         8️⃣  RSVP — Confirmation de présence
+         ══════════════════════════════════════════════════════════════ -->
+    <section id="rsvp" class="px-4 py-16 md:py-24" aria-labelledby="rsvp-title">
+      <div class="max-w-2xl mx-auto" data-reveal>
+        <div class="text-center">
+          <h2 id="rsvp-title" class="title-royal text-2xl md:text-4xl text-royal">Répondez-nous&nbsp;!</h2>
+          <svg class="w-36 h-4 text-gold mx-auto mt-3" aria-hidden="true"><use href="#orn"/></svg>
+          <p class="mt-4 text-ink/70">Merci de répondre avant le <strong class="text-gold-deep">20 novembre 2026</strong> — du fond du cœur&nbsp;🤍</p>
+        </div>
+
+        <!-- ── Formulaire ── -->
+        <form id="rsvp-form" class="glass rounded-3xl shadow-soft p-6 sm:p-10 mt-10 space-y-6" novalidate>
+          <!-- Nom -->
+          <div>
+            <label for="rsvp-name" class="block text-sm font-semibold text-ink mb-1.5">Nom &amp; prénom <span class="text-gold-deep" aria-hidden="true">*</span></label>
+            <input id="rsvp-name" name="name" type="text" required autocomplete="name" placeholder="Ex.&nbsp;: Marie Kouassi"
+                   class="w-full rounded-xl border border-gold/40 bg-white/80 px-4 py-3 text-ink placeholder:text-ink/35 focus:border-gold-deep focus:outline-none transition-colors" />
+            <p class="sr-only" id="err-name" role="alert"></p>
+          </div>
+          <!-- Présence -->
+          <fieldset>
+            <legend class="block text-sm font-semibold text-ink mb-1.5">Serez-vous parmi nous&nbsp;? <span class="text-gold-deep" aria-hidden="true">*</span></legend>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <label class="cursor-pointer rounded-xl border border-gold/40 bg-white/80 px-4 py-3 flex items-center gap-3 hover:bg-gold/5 has-[:checked]:border-gold-deep has-[:checked]:bg-gold/10 transition-colors">
+                <input type="radio" name="attending" value="yes" required class="accent-[#8C6D33] w-4 h-4" />
+                <i data-lucide="heart" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i>
+                <span class="text-sm font-medium text-ink">Je serai présent·e</span>
+              </label>
+              <label class="cursor-pointer rounded-xl border border-gold/40 bg-white/80 px-4 py-3 flex items-center gap-3 hover:bg-gold/5 has-[:checked]:border-gold-deep has-[:checked]:bg-gold/10 transition-colors">
+                <input type="radio" name="attending" value="no" required class="accent-[#8C6D33] w-4 h-4" />
+                <i data-lucide="message-circle" class="w-4 h-4 text-ink/60" aria-hidden="true"></i>
+                <span class="text-sm font-medium text-ink">Je ne pourrai pas venir</span>
+              </label>
+            </div>
+            <p class="sr-only" id="err-attending" role="alert"></p>
+          </fieldset>
+          <!-- Téléphone (pour le lien WhatsApp & retrouver votre réponse) -->
+          <div>
+            <label for="rsvp-phone" class="block text-sm font-semibold text-ink mb-1.5">Téléphone WhatsApp <span class="text-gold-deep" aria-hidden="true">*</span></label>
+            <input id="rsvp-phone" name="phone" type="tel" required autocomplete="tel" placeholder="Ex.&nbsp;: +225 07 07 07 07 07"
+                   class="w-full rounded-xl border border-gold/40 bg-white/80 px-4 py-3 text-ink placeholder:text-ink/35 focus:border-gold-deep focus:outline-none transition-colors" />
+            <p class="sr-only" id="err-phone" role="alert"></p>
+          </div>
+          <!-- Accompagnants -->
+          <div>
+            <label for="rsvp-guests" class="block text-sm font-semibold text-ink mb-1.5">Nombre d'accompagnants</label>
+            <input id="rsvp-guests" name="guests" type="number" min="0" max="10" step="1" value="0"
+                   class="w-full rounded-xl border border-gold/40 bg-white/80 px-4 py-3 text-ink focus:border-gold-deep focus:outline-none transition-colors" />
+            <p class="sr-only" id="err-guests" role="alert"></p>
+          </div>
+          <!-- Restrictions alimentaires -->
+          <div>
+            <label for="rsvp-diet" class="block text-sm font-semibold text-ink mb-1.5">Restrictions alimentaires <span class="font-normal text-ink/50">(facultatif)</span></label>
+            <textarea id="rsvp-diet" name="diet" rows="3" placeholder="Végétarien, allergies, intolérances…"
+                      class="w-full rounded-xl border border-gold/40 bg-white/80 px-4 py-3 text-ink placeholder:text-ink/35 focus:border-gold-deep focus:outline-none transition-colors resize-none"></textarea>
+          </div>
+          <button type="submit" class="w-full inline-flex justify-center items-center gap-2 rounded-full bg-gold-deep text-white font-semibold px-6 py-4 text-sm tracking-wide hover:bg-[#7a5f2b] active:scale-[.99] transition-all duration-300 shadow-soft">
+            <i data-lucide="heart" class="w-4 h-4" aria-hidden="true"></i> Envoyer ma réponse
+          </button>
+          <p class="text-xs text-center text-ink/45">Une question ? Écrivez-nous au <strong class="text-gold-deep">07 57 67 77 07</strong> — nous vous répondons avec joie&nbsp;💛</p>
+        </form>
+
+        <!-- ── Confirmation + Pass Invité (généré en JS) ── -->
+        <div id="rsvp-done" class="hidden mt-10 text-center">
+          <div class="glass rounded-3xl shadow-soft p-8" data-reveal>
+            <span class="mx-auto w-14 h-14 rounded-full bg-sage/25 flex items-center justify-center">
+              <i data-lucide="check" class="w-7 h-7 text-sageDeep" aria-hidden="true"></i>
+            </span>
+            <h3 class="font-serif text-3xl text-ink italic mt-4" id="merci-title">Merci&nbsp;!</h3>
+            <p class="mt-2 text-ink/75" id="merci-text"></p>
+
+            <!-- 🎟️ Pass Invité + QR code -->
+            <div id="pass-slot" class="mt-8 inline-block text-left"></div>
+
+            <div class="mt-6 flex flex-wrap justify-center gap-3">
+              <button id="download-pass" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold-deep text-white text-sm font-semibold hover:bg-[#7a5f2b] transition-colors">
+                <i data-lucide="download" class="w-4 h-4" aria-hidden="true"></i> Télécharger le pass (PNG)
+              </button>
+              <button id="wa-confirm" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] text-white text-sm font-semibold hover:bg-[#1fb457] transition-colors">
+                <i data-lucide="message-circle" class="w-4 h-4" aria-hidden="true"></i> Confirmer aussi par WhatsApp
+              </button>
+            </div>
+            <p class="mt-5 text-xs text-ink/50 flex items-center justify-center gap-1.5">
+              <i data-lucide="lock" class="w-3 h-3" aria-hidden="true"></i> Votre réponse est enregistrée une seule fois — inutile de répondre à nouveau.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         9️⃣  LIVRE D'OR — « Mots doux »
+         ══════════════════════════════════════════════════════════════ -->
+    <section id="livredor" class="px-4 py-16 md:py-24 bg-sage/10" aria-labelledby="guestbook-title">
+      <div class="max-w-2xl mx-auto" data-reveal>
+        <div class="text-center">
+          <h2 id="guestbook-title" class="title-royal text-2xl md:text-4xl text-royal">Mots doux</h2>
+          <svg class="w-36 h-4 text-gold mx-auto mt-3" aria-hidden="true"><use href="#orn"/></svg>
+          <p class="mt-4 text-ink/70 font-serif italic text-lg">Laissez-nous un petit mot pour la route&nbsp;✍️</p>
+        </div>
+
+        <form id="gb-form" class="glass rounded-3xl shadow-soft p-6 mt-10" novalidate>
+          <label for="gb-name" class="block text-sm font-semibold text-ink mb-1.5">Votre nom</label>
+          <input id="gb-name" type="text" required placeholder="Ex.&nbsp;: la cousine Marie"
+                 class="w-full rounded-xl border border-gold/40 bg-white/80 px-4 py-2.5 text-ink placeholder:text-ink/35 focus:border-gold-deep focus:outline-none transition-colors" />
+          <p class="sr-only" id="err-gb" role="alert"></p>
+          <label for="gb-msg" class="block text-sm font-semibold text-ink mt-4 mb-1.5">Votre message</label>
+          <textarea id="gb-msg" rows="3" required maxlength="280" placeholder="Merci pour ce merveilleux souvenir…"
+                    class="w-full rounded-xl border border-gold/40 bg-white/80 px-4 py-2.5 text-ink placeholder:text-ink/35 focus:border-gold-deep focus:outline-none transition-colors resize-none"></textarea>
+          <div class="flex items-center justify-between mt-2">
+            <p class="text-xs text-ink/45">280 caractères max</p>
+            <p id="gb-count" class="text-xs tabular-nums text-ink/50" aria-live="polite">0 / 280</p>
+          </div>
+          <button type="submit" class="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gold-deep text-white text-sm font-semibold hover:bg-[#7a5f2b] transition-colors w-full sm:w-auto justify-center">
+            <i data-lucide="pen-line" class="w-4 h-4" aria-hidden="true"></i> Signer le livre d'or
+          </button>
+        </form>
+
+        <!-- Messages (persistés en localStorage) -->
+        <ul id="gb-list" class="mt-10 space-y-4" aria-live="polite"></ul>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         🔟  PARTAGE — « Faites passer l'invitation »
+         ══════════════════════════════════════════════════════════════ -->
+    <section id="wishlist" class="px-4 py-16 md:py-24" aria-labelledby="wish-title">
+      <div class="max-w-2xl mx-auto text-center" data-reveal>
+        <h2 id="wish-title" class="title-royal text-2xl md:text-4xl text-royal">Votre présence est notre plus beau cadeau</h2>
+        <svg class="w-36 h-4 text-gold mx-auto mt-3" aria-hidden="true"><use href="#orn"/></svg>
+
+        <!-- Enveloppe à cachet de cire : partager l'invitation -->
+        <div class="relative mt-10 glass rounded-3xl shadow-soft p-8 overflow-hidden">
+          <div class="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-gold/10 blur-2xl" aria-hidden="true"></div>
+          <div class="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-blush/40 blur-2xl" aria-hidden="true"></div>
+          <span class="mx-auto w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center relative">
+            <i data-lucide="send" class="w-6 h-6 text-gold-deep" aria-hidden="true"></i>
+          </span>
+          <h3 class="font-serif text-2xl text-ink mt-4 relative">Faites passer l'invitation&nbsp;💌</h3>
+          <p class="text-sm text-ink/70 mt-2 leading-relaxed relative">Un proche qui ne l'a pas encore reçue&nbsp;? Envoyez-lui ce petit mot signé Diane &amp; Amon.</p>
+          <div class="mt-6 flex flex-wrap justify-center gap-3 relative">
+            <button id="share-wa" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#25D366] text-white text-sm font-semibold hover:bg-[#1fb457] transition-colors">
+              <i data-lucide="message-circle" class="w-4 h-4" aria-hidden="true"></i> Partager sur WhatsApp
+            </button>
+            <button id="share-copy" class="inline-flex items-center gap-2 px-6 py-3 rounded-full glass text-gold-deep text-sm font-semibold hover:bg-gold/10 transition-colors">
+              <i data-lucide="copy" class="w-4 h-4" aria-hidden="true"></i> Copier le lien
+            </button>
+          </div>
+          <button id="share-hashtag" class="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-ink/45 hover:text-gold-deep transition-colors relative" title="Copier le hashtag">
+            <i data-lucide="hash" class="w-3.5 h-3.5" aria-hidden="true"></i> <span id="share-hashtag-txt">#DianeEtAmon2026</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════ PIED DE PAGE ═══════════════════════════ -->
+  <footer class="px-4 pt-10 pb-28 md:pb-16 royal-dark text-center">
+    <div class="absolute top-0 left-0 right-0" aria-hidden="true">
+      <svg class="kente-x2"><rect width="100%" height="100%" fill="url(#kente)"/></svg>
+      <div class="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+    </div>
+    <div class="max-w-xl mx-auto mt-8" data-reveal>
+      <span class="w-12 h-12 rounded-full bg-[#0E2C22]/60 border border-gold/50 flex items-center justify-center mx-auto"><i data-lucide="heart" class="w-5 h-5 text-gold" aria-hidden="true"></i></span>
+      <svg class="w-32 h-4 text-gold mx-auto mt-3" aria-hidden="true"><use href="#orn"/></svg>
+      <p class="font-serif italic text-2xl text-gold/90 mt-5">Avec toute notre tendresse,</p>
+      <p class="font-display gold-text text-4xl tracking-[.05em] mt-1" id="footer-names">Diane &amp; Amon</p>
+      <p class="mt-4 text-gold font-semibold tracking-wide" id="footer-hashtag">#NomDesMaries2026</p>
+      <p class="mt-6 text-sm text-cream/70">Merci de faire partie de notre histoire&nbsp;— à très vite&nbsp;!</p>
+      <p class="mt-8 text-xs text-cream/45 flex items-center justify-center gap-1.5">
+        Fait avec <i data-lucide="heart" class="w-3.5 h-3.5 fill-current" style="color:#C9A227" aria-hidden="true"></i> pour notre grand jour
+      </p>
+      <p class="mt-3 text-[11px] text-cream/35 tracking-[.2em]">© 2026 — Ahimsa&nbsp;HkM</p>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       2️⃣  LECTEUR MUSIQUE D'AMBIANCE — bouton flottant
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 sm:gap-3">
+    <span class="music-label block glass rounded-full px-4 py-2 text-xs font-medium text-ink shadow-soft opacity-0 translate-x-2 transition-all duration-300 max-w-[38vw] sm:max-w-[240px] truncate" id="music-label">Lecture</span>
+    <button id="music-next" aria-label="Passer au titre suivant de la playlist" title="Titre suivant"
+            class="w-11 h-11 sm:w-12 sm:h-12 rounded-full glass shadow-soft flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 shrink-0">
+      <i data-lucide="skip-forward" class="w-4 h-4 text-gold-deep" aria-hidden="true"></i>
+    </button>
+    <button id="music-btn" aria-label="Lancer ou mettre en pause la musique d'ambiance" aria-pressed="false"
+            class="group w-14 h-14 rounded-full glass shadow-lift flex items-center justify-center hover:scale-105 active:scale-95 transition-transform duration-300 shrink-0">
+      <span class="wave flex items-center -ml-1" id="wave" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <span class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <i data-lucide="music" class="w-5 h-5 text-gold-deep" id="music-icon" aria-hidden="true"></i>
+      </span>
+    </button>
+  </div>
+  <!-- Lecteur YouTube caché (remplacé par l'iframe de l'API) — hors écran, jamais affiché -->
+
+  <!-- Lightbox (galerie d'inspiration) -->
+  <div id="lightbox" class="fixed inset-0 z-[110] hidden flex-col items-center justify-center p-6" style="background:rgba(11,36,28,.9)" role="dialog" aria-modal="true" aria-label="Aperçu de l'inspiration">
+    <div class="glass rounded-2xl overflow-hidden max-w-md w-full shadow-lift">
+      <div id="lightbox-art" class="aspect-video w-full"></div>
+      <div class="flex items-center justify-between px-5 py-4">
+        <p id="lightbox-caption" class="font-serif italic text-lg text-ink"></p>
+        <button id="lightbox-close" class="w-9 h-9 rounded-full hover:bg-gold/10 flex items-center justify-center" aria-label="Fermer l'aperçu"><i data-lucide="x" class="w-5 h-5 text-ink" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteneur de toasts -->
+  <div id="toasts" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[120] flex flex-col items-center gap-2 pointer-events-none" aria-live="polite"></div>
+
+  <!-- Grain overlay -->
+  <div class="grain-overlay" aria-hidden="true" style="border:none"></div>
+
+  <script>
+  'use strict';
+  /* ══════════════════════════════════════════════════════════════════
+     🪄  CONFIGURATION — tout se personnalise ICI
+     ─────────────────────────────────────────────────────────────────
+     INSTRUCTIONS RAPIDES (copiez-collez, remplacez, déployez) :
+     1. Éditez CONFIG ci-dessous : noms, date, lieu, liens, musique.
+     2. Remplacez le bloc placeholder [Photo du couple] par votre <img> WebP.
+     3. Déposez music.mp3 à côté du fichier, renseignez CONFIG.music.src.
+     4. Déployez tel quel sur Netlify / Vercel / GitHub Pages.
+     ══════════════════════════════════════════════════════════════════ */
+  const CONFIG = {
+    couple: {
+      name1: 'Diane',                            // Diane KPADONOU
+      name2: 'Amon',                             // Amon ALPHONSE
+      monogram: 'D & A',                         // cachet de cire
+      hashtag: '#DianeEtAmon2026',
+      family1: 'Mlle Diane KPADONOU',
+      family2: 'M. Amon ALPHONSE'
+    },
+    wedding: {
+      // ⚠️ Format ISO local 'YYYY-MM-DDTHH:mm:ss'
+      dateISO: '2026-12-04T12:00:00',            // 04 décembre 2026 — cérémonie civile 12h00 (mairie)
+      endISO:  '2026-12-04T22:00:00',
+      label:   'Le vendredi 4 décembre 2026',
+      deadlineLabel: '20 novembre 2026',
+      timezone: 'Africa/Abidjan'
+    },
+    venue: {
+      civil: {
+        name: 'Mairie de Port-Bouët',
+        address: 'Mairie de Port-Bouët, Abidjan, Côte d\'Ivoire',
+        label: 'Cérémonie civile · 12h00',
+        /* Lieu épinglé par les mariés (Google Maps) + coordonnées GPS exactes pour l'itinéraire */
+        maps: 'https://maps.app.goo.gl/L6FsJPSw8nJHtjhT7',
+        lat: 5.2593243, lng: -3.9650464
+      },
+      reception: {
+        name: 'Pieu de Grand-Bassam',
+        address: 'Pieu de Grand-Bassam — Église de Jésus-Christ des saints des derniers jours, Grand-Bassam, Côte d\'Ivoire',
+        label: 'Cocktail 14h00 · Réception 15h00',
+        maps: 'https://maps.app.goo.gl/BvRsr8DWcmnYXGxs8',
+        lat: 5.2148346, lng: -3.7388405
+      }
+    },
+    music: {
+      volume: 60,                                // 0 à 100
+      /* ── Playlist de la soirée : VOS chansons COMPLÈTES (128k, fondu de fin).
+         Le 1er titre imposé est « KS Bloom — Mariage », puis ordre VRAIMENT
+         aléatoire (chaque titre passe une fois avant un nouveau tirage),
+         enchaînement automatique jusqu'à la fin de chaque chanson.
+         Fichiers servis depuis playlists/. ── */
+      tracks: [
+        { titre: 'KS Bloom — Mariage',                                src: 'playlists/01-ks-bloom-mariage.mp3' },
+        { titre: 'Wilson — Le monde doit savoir (acoustique)',        src: 'playlists/02-wilson-le-monde-doit-savoir-acoustique.mp3' },
+        { titre: 'Ogechi (Remix) ft. Davido — BoyPee, Hyce, Brown Joel', src: 'playlists/03-ogechi-remix-ft-davido-boypee-hyce-brown-joel.mp3' },
+        { titre: 'Darina Victry — Laisse-moi t\u2019aimer',           src: 'playlists/04-darina-victry-laisse-moi-taimer.mp3' },
+        { titre: 'Eden — Je suis mariée',                             src: 'playlists/05-eden-je-suis-mariee.mp3' },
+        { titre: 'Dadju — Ma Woman',                                  src: 'playlists/06-dadju-ma-woman.mp3' },
+        { titre: 'Weisley & Wilson — Mélodie',                        src: 'playlists/07-weisley-wilson-melodie.mp3' },
+        { titre: 'Magic Diezel — Maladie d\u2019amour',               src: 'playlists/08-magic-diezel-maladie-damour.mp3' },
+        { titre: 'T\u2019es ma femme, t\u2019es la plus belle',       src: 'playlists/09-tes-ma-femme-tes-la-plus-belle.mp3' },
+        { titre: 'Flavour — Someone Like You',                        src: 'playlists/10-flavour-someone-like-you.mp3' },
+        { titre: 'Fally Ipupa — You The Best',                        src: 'playlists/11-fally-ipupa-you-the-best.mp3' },
+        { titre: 'Grand Corps Malade — Mes doutes avec toi',          src: 'playlists/12-grand-corps-malade-mes-doutes-avec-toi.mp3' },
+        { titre: 'Pekuelle — Ça va commencer',                        src: 'playlists/13-pekuelle-ca-va-commencer.mp3' },
+        { titre: 'Bebi Philip — Me yoff (feat. Josey)',               src: 'playlists/14-bebi-philip-me-yoff-feat-josey.mp3' },
+        { titre: 'Kotrell — Now and Always',                          src: 'playlists/15-kotrell-now-and-always.mp3' }
+      ]
+    },
+    /* Plus de cagnotte/liste de cadeaux : votre présence est le cadeau —
+       la section « partage » ci-dessous ne dépend d'aucun lien externe. */
+    /* ── Backend (FastAPI) : réception des RSVP + WhatsApp ──
+       Auto : si la page est servie par le backend (serveur local, Render…),
+       la même adresse est utilisée. Sinon (page hébergée séparément),
+       mettez ici l'URL publique du backend, ex. 'https://mon-mariage.onrender.com'.
+       Démarrez en local : double-clic sur DEMARRER-SERVEUR.bat */
+    api: {
+      enabled: true,
+      base: location.protocol.startsWith('http') ? location.origin : 'http://localhost:8010',
+      whatsappPhone: '+2250757677707'        // ⬅️ WhatsApp des mariés — Diane & Amon (07 57 67 77 07)
+    }
+  };
+
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+  const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const LS = {
+    get: (k, d) => { try { return JSON.parse(localStorage.getItem(`mariage.${k}`)) ?? d; } catch { return d; } },
+    set: (k, v) => { try { localStorage.setItem(`mariage.${k}`, JSON.stringify(v)); } catch {/* iOS privé */} }
+  };
+
+  /* Injecte la configuration dans les placeholders dès le chargement */
+  (function hydrate() {
+    document.title = `Invitation — Mariage de ${CONFIG.couple.name1} & ${CONFIG.couple.name2}`;
+    $('#seal-initials').textContent = (CONFIG.couple.monogram || '♥').replace(/^\[|\]$/g, '');
+    $('#hero-name1').textContent = CONFIG.couple.name1;
+    $('#hero-name2').textContent = CONFIG.couple.name2;
+    $('#intro-couple').textContent = `${CONFIG.couple.name1} & ${CONFIG.couple.name2}`;
+    $('#footer-names').textContent = `${CONFIG.couple.name1} & ${CONFIG.couple.name2}`;
+    $('#footer-hashtag').textContent = CONFIG.couple.hashtag;
+    $('#date-long').textContent = CONFIG.wedding.label;
+    $$('.cfg-date').forEach(el => el.textContent = CONFIG.wedding.label);
+  })();
+
+  /* ═══════════ 1️⃣ ENVELOPPE : motion design orchestré en JS ═══════════ */
+  (() => {
+    const overlay = $('#intro-overlay'), env = $('#envelope'), btn = $('#envelope-btn');
+    let opened = false, fini = false;
+
+    /* Apparition douce du décor d'intro dès le chargement (tone-by-tone) */
+    $$('#intro-overlay [data-hero]').forEach(el => {
+      const d = Number((el.dataset.hero || '__d0').slice(2)) || 0;
+      setTimeout(() => el.classList.add('in'), d);
+    });
+
+    /* Poussière d'or ambiant : de fines lueurs montent en boucle */
+    for (let i = 0; i < 10; i++) {
+      const d = document.createElement('span');
+      d.className = 'gold-dot';
+      d.style.left = (5 + Math.random() * 90) + 'vw';
+      d.style.animationDuration = (6 + Math.random() * 8) + 's';
+      d.style.animationDelay = (-Math.random() * 10) + 's';
+      overlay.append(d);
+    }
+
+    /* Éclat du sceau : gerbe de particules dorées depuis le cachet */
+    function burst() {
+      const seal = $('.env-seal', env), r = seal.getBoundingClientRect(), o = overlay.getBoundingClientRect();
+      const cx = r.left - o.left + r.width / 2, cy = r.top - o.top + r.height / 2;
+      for (let i = 0; i < 16; i++) {
+        const s = document.createElement('span');
+        const a = Math.random() * Math.PI * 2, dist = 55 + Math.random() * 100;
+        s.className = 'spark';
+        s.style.left = cx + 'px'; s.style.top = cy + 'px';
+        s.style.setProperty('--tx', Math.round(Math.cos(a) * dist) + 'px');
+        s.style.setProperty('--ty', Math.round(Math.sin(a) * dist - 30) + 'px');
+        s.style.animationDuration = (.7 + Math.random() * .5).toFixed(2) + 's';
+        overlay.append(s);
+        setTimeout(() => s.remove(), 1400);
+      }
+    }
+
+    /* Phase finale — la carte reste lisible ~3 s, puis l'invitation apparaît */
+    function terminer() {
+      if (fini) return; fini = true;
+      env.classList.add('open', 'lift', 'zoom');
+      overlay.style.opacity = '0';
+      document.body.classList.remove('locked');       // fin du scroll lock
+      startHero();                                    // fade-in séquencé du hero
+      setTimeout(() => overlay.remove(), 750);
+    }
+
+    btn.addEventListener('click', () => {
+      if (opened) return; opened = true;
+      btn.setAttribute('aria-label', 'Ouverture de l\'enveloppe en cours…');
+      const hint = $('#open-hint');
+      hint.classList.add('opacity-0'); hint.style.transition = 'opacity .3s';
+      env.classList.add('open');                       // 1. le sceau cède, le rabat se soulève
+      burst();                                         //    + gerbe de particules or
+      window.Music?.play();                            // 🎵 la musique démarre (geste utilisateur)
+      setTimeout(() => env.classList.add('lift'), 620);// 2. la carte glisse hors de l'enveloppe
+      setTimeout(() => env.classList.add('zoom'), 1450);// 3. la carte s'agrandit au centre — texte révélé ligne à ligne
+      setTimeout(terminer, 4900);                      // 4. temps de lecture, puis l'invitation
+    });
+
+    /* Impatient·e ? Un toucher n'importe où achève l'animation */
+    overlay.addEventListener('click', e => { if (opened && !e.target.closest('#envelope-btn')) terminer(); });
+  })();
+
+  /* Fade-in séquencé du hero (data-hero = délai en ms, ex. __d300) */
+  function startHero() {
+    $$('[data-hero]').forEach(el => {
+      const d = Number((el.dataset.hero || '__d0').slice(2)) || 0;
+      setTimeout(() => el.classList.add('in'), d);
+    });
+  }
+
+  /* ═══════════ Révélation au scroll — IntersectionObserver ═══════════ */
+  (() => {
+    if (!('IntersectionObserver' in window)) { $$('[data-reveal]').forEach(el => el.classList.add('revealed')); return; }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+    }, { threshold: .15, rootMargin: '0px 0px -40px 0px' });
+    $$('[data-reveal]').forEach(el => io.observe(el));
+  })();
+
+  /* ═══════════ 4️⃣ COMPTE À REBOURS live ═══════════ */
+  (() => {
+    const target = new Date(CONFIG.wedding.dateISO).getTime();
+    const pad = n => String(n).padStart(2, '0');
+    const els = { d: $('#cd-days'), h: $('#cd-hours'), m: $('#cd-mins'), s: $('#cd-secs') };
+    let lastMinuteSummary = -1;
+    let timer = null;
+    function tick() {
+      let diff = target - Date.now();
+      if (diff <= 0) {
+        els.d.textContent = els.h.textContent = els.m.textContent = els.s.textContent = '0';
+        $('#date-long').textContent = 'C\'est aujourd\'hui — nous vous y voyons !';
+        if (timer) clearInterval(timer); return;
+      }
+      const d = Math.floor(diff / 864e5), h = Math.floor(diff % 864e5 / 36e5),
+            m = Math.floor(diff % 36e5 / 6e4), s = Math.floor(diff % 6e4 / 1e3);
+      els.d.textContent = d; els.h.textContent = pad(h); els.m.textContent = pad(m); els.s.textContent = pad(s);
+      if (m !== lastMinuteSummary) {                   // aria-live : 1 mise à jour / min, pas / s
+        lastMinuteSummary = m;
+        $('#countdown-live').textContent = `Le mariage est dans ${d} jours, ${h} heures et ${m} minutes.`;
+      }
+    }
+    tick();
+    timer = setInterval(tick, 1000);
+  })();
+
+  /* ═══════════ Popovers réutilisables (calendrier & itinéraire) ══════ */
+  (() => {
+    const closeAll = (except) => $$('[data-pop-menu]').forEach(m => {
+      if (m !== except) { m.classList.add('hidden-pop'); m.closest('[data-pop]').querySelector('[data-pop-btn]').setAttribute('aria-expanded', 'false'); }
+    });
+    $$('[data-pop]').forEach(pop => {
+      const btn = pop.querySelector('[data-pop-btn]'), menu = pop.querySelector('[data-pop-menu]');
+      btn.addEventListener('click', () => {
+        const willOpen = menu.classList.contains('hidden-pop');
+        closeAll(menu); closeAll();
+        menu.classList.toggle('hidden-pop', !willOpen);
+        btn.setAttribute('aria-expanded', String(willOpen));
+        if (willOpen) requestAnimationFrame(() => {   // mobile : maintenir le menu dans l'écran
+          const r = menu.getBoundingClientRect(), vw = document.documentElement.clientWidth, m = 8;
+          const dx = r.right > vw - m ? vw - m - r.right : (r.left < m ? m - r.left : 0);
+          menu.style.marginLeft = dx ? dx + 'px' : '';
+        });
+      });
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('[data-pop]')) closeAll(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+  })();
+
+  /* ═══════════ 4️⃣b AJOUT AU CALENDRIER (Google / .ics / Outlook) ═════ */
+  (() => {
+    const w = CONFIG.wedding, title = `Mariage de ${CONFIG.couple.name1} & ${CONFIG.couple.name2}`;
+    const loc = `Cérémonie civile : ${CONFIG.venue.civil.name} (Abidjan) — Réception : ${CONFIG.venue.reception.name} (Grand-Bassam)`;
+    const compact = iso => iso.replace(/[-:]/g, '').slice(0, 15);          // 20260620T160000
+    const gCal = () => window.open('https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + `&text=${encodeURIComponent(title)}&dates=${compact(w.dateISO)}/${compact(w.endISO)}`
+      + `&ctz=${encodeURIComponent(w.timezone)}&location=${encodeURIComponent(loc)}`, '_blank');
+    const outlook = () => window.open('https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&ru=https://outlook.live.com/calendar/0/action/compose'
+      + `&subject=${encodeURIComponent(title)}&location=${encodeURIComponent(loc)}`
+      + `&startdt=${encodeURIComponent(w.dateISO)}&enddt=${encodeURIComponent(w.endISO)}`, '_blank');
+    function ics() {
+      const dup = s => s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,');
+      const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Invitation Mariage//FR',
+        'CALSCALE:GREGORIAN', 'BEGIN:VEVENT',
+        `UID:${Date.now()}-invit@mariage`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+        `DTSTART;TZID=${w.timezone}:${compact(w.dateISO)}`,
+        `DTEND;TZID=${w.timezone}:${compact(w.endISO)}`,
+        `SUMMARY:${dup(title)}`, `LOCATION:${dup(loc)}`,
+        'DESCRIPTION:Ceremonie civile 12h00 Mairie de Port-Bouet\\, cocktail 14h00 puis reception 15h00 au Pieu de Grand-Bassam. Dress code : tenue de soiree. RSVP avant le 20 novembre.',
+        'BEGIN:VALARM', 'TRIGGER:-PT24H', 'ACTION:DISPLAY', 'DESCRIPTION:Rappel — mariage demain !', 'END:VALARM',
+        'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+      const blob = new Blob([body], { type: 'text/calendar;charset=utf-8' });
+      const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'mariage.ics' });
+      document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(a.href);
+    }
+    $$('[data-cal]').forEach(b => b.addEventListener('click', () => {
+      ({ google: gCal, ics, outlook: outlook })[b.dataset.cal]();
+      $$('[data-pop-menu]').forEach(m => m.classList.add('hidden-pop'));
+    }));
+  })();
+
+  /* ═══════════ 6️⃣ ITINÉRAIRES (2 lieux) + pré-sélection IA iOS/Android ═══════════ */
+  (() => {
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const recoKey = isIOS ? 'apple' : /Android/.test(ua) ? 'google' : 'google';   // pré-sélection par plateforme
+    // Badge « Recommandé » : Apple Plans sur iOS, Google Maps ailleurs
+    $$('[data-reco]').forEach(s => {
+      if (s.dataset.reco === recoKey) { s.textContent = 'Recommandé'; s.classList.remove('hidden'); }
+    });
+
+    const MAPS = {
+      google: v => `https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lng}`,
+      apple:  v => `https://maps.apple.com/?q=${v.lat},${v.lng}&dirflg=d`,
+      waze:   v => `https://waze.com/ul?ll=${v.lat},${v.lng}&navigate=yes`,
+      lieu:   v => v.maps
+    };
+    $$('[data-map]').forEach(b => b.addEventListener('click', () => {
+      const venueEl = b.closest('.data-venue');
+      const v = venueEl?.dataset.venueKey ? CONFIG.venue[venueEl.dataset.venueKey] : null;
+      if (v) window.open(MAPS[b.dataset.map](v), '_blank');
+      $$('[data-pop-menu]').forEach(m => m.classList.add('hidden-pop'));
+    }));
+
+    /* Copier l'adresse — feedback immédiat (pour chacune des 2 cartes) */
+    $$('.copy-addr').forEach(btn => btn.addEventListener('click', async () => {
+      const txt = btn.closest('.data-venue')?.dataset.venueName || '';
+      try { await navigator.clipboard.writeText(txt); }
+      catch { /* fallback file:// / anciens navigateurs */
+        const ta = Object.assign(document.createElement('textarea'), { value: txt });
+        document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      }
+      const label = btn.innerHTML; btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Copiée ✓';
+      window.lucide?.createIcons();
+      setTimeout(() => { btn.innerHTML = label; window.lucide?.createIcons(); }, 2200);
+    }));
+  })();
+
+  /* ═══════════ 7️⃣ GALERIE INSPIRATION + LIGHTBOX accessible ═══════════ */
+  (() => {
+    const lb = $('#lightbox');
+    let lastFocus = null;
+    const open = (item) => {
+      lastFocus = item;
+      const art = item.querySelector('span');
+      $('#lightbox-art').innerHTML = art ? art.innerHTML : '';
+      $('#lightbox-art').style.overflow = 'hidden';
+      $('#lightbox-art').style.height = '';
+      // Photos : ratio naturel (via l'attribut width/height) ; SVG : carré
+      const hasImg = !!$('#lightbox-art img');
+      const box = $('#lightbox-art');
+      box.className = 'w-full ' + (hasImg ? 'rounded-xl overflow-hidden' : 'aspect-square');
+      if (hasImg) { const im = box.querySelector('img'); im.classList.remove('w-full','h-full','object-cover'); im.classList.add('w-full','h-auto'); im.removeAttribute('loading'); }
+      $('#lightbox-caption').textContent = item.dataset.caption;
+      lb.classList.remove('hidden'); lb.classList.add('flex');
+      $('#lightbox-close').focus();
+    };
+    const close = () => { lb.classList.add('hidden'); lb.classList.remove('flex'); lastFocus?.focus(); };
+    $$('.gallery-item').forEach(it => it.addEventListener('click', () => open(it)));
+    $('#lightbox-close').addEventListener('click', close);
+    lb.addEventListener('click', e => { if (e.target === lb) close(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.classList.contains('hidden')) close(); });
+  })();
+
+  /* ═══════════ Toasts — feedback transverse ═══════════ */
+  function toast(msg, ms = 3200) {
+    const el = document.createElement('div');
+    el.className = 'toast glass rounded-full px-5 py-2.5 text-sm font-medium text-ink shadow-lift';
+    el.textContent = msg;
+    $('#toasts').append(el);
+    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 350); }, ms);
+  }
+
+  /* ═══════════ 8️⃣ RSVP : validation, pass QR, persistance ═══════════ */
+  (() => {
+    const form = $('#rsvp-form'), done = $('#rsvp-done'), passSlot = $('#pass-slot');
+    let guest = LS.get('rsvp', null);
+
+    const setErr = (id, msg) => { const p = $(`#err-${id}`); p.textContent = msg; p.classList.toggle('sr-only', !msg); if (msg) p.classList.remove('sr-only'); };
+
+    function buildPass(g) {
+      passSlot.innerHTML = '';
+      const isPresent = g.attending === 'yes';
+      passSlot.insertAdjacentHTML('beforeend', `
+        <div class="w-72 sm:w-80 rounded-2xl bg-[#FFFDF9] border border-gold/40 shadow-soft overflow-hidden">
+          <div class="bg-gold/15 px-5 py-4 flex items-center justify-between">
+            <span class="font-serif italic text-lg text-gold-deep">${isPresent ? '🎟️ Pass Invité' : '💌 Carte de regrets'}</span>
+            <span class="text-[10px] font-bold tracking-widest text-gold-deep/70 uppercase">${esc(g.num)}</span>
+          </div>
+          <div class="p-5 text-center">
+            <p class="text-xs uppercase tracking-[.25em] text-ink/50">Invitation d'entrée</p>
+            <p class="font-serif text-2xl text-ink mt-1">${esc(g.name)}</p>
+            <p class="text-sm text-ink/65 mt-1">${CONFIG.wedding.label} · ${esc(CONFIG.venue.reception.name)}</p>
+            <p class="text-xs text-ink/50 mt-1">${isPresent ? `${esc(g.guests)} accompagnant(s)${g.diet ? ` · ${esc(g.diet)}` : ''}` : 'Absence regrettée'}</p>
+            <div id="qrcode" class="mt-4 flex justify-center"></div>
+            <svg class="w-28 h-3 text-gold mx-auto mt-3"><use href="#orn"/></svg>
+            <p class="text-[10px] text-ink/40 mt-2">${esc(CONFIG.couple.hashtag)} · Passe numérique, à montrer à l'entrée</p>
+          </div>
+        </div>`);
+      // QR code fictif (identité du pass) — lib qrcode.js
+      if (typeof QRCode !== 'undefined') {
+        new QRCode($('#qrcode'), {
+          text: `MARIAGE|${g.num}|${g.name}|${g.attending}|${g.guests}`,
+          width: 132, height: 132, colorDark: '#4A4238', colorLight: '#FFFDF9',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } else toast('⚠️ Librairie QR non chargée (connexion ?)');
+      guest = g; LS.set('rsvp', g);
+    }
+
+    function showConfirmation(g) {
+      form.classList.add('hidden'); done.classList.remove('hidden');
+      const first = g.name.trim().split(/\s+/)[0];
+      $('#merci-title').textContent = g.attending === 'yes' ? `Merci, ${first} 🤍` : `Merci, ${first}`;
+      $('#merci-text').textContent = g.attending === 'yes'
+        ? 'Votre pass vous attend ci-dessous — imprimez-le ou gardez-le sur votre téléphone.'
+        : 'Votre message nous touche énormément. Une carte de regrets a été générée pour marquer le coup.';
+      buildPass(g);
+      window.lucide?.createIcons();
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = $('#rsvp-name').value.trim();
+      const phone = $('#rsvp-phone').value.trim();
+      const attending = form.querySelector('input[name=attending]:checked')?.value;
+      const guests = Number($('#rsvp-guests').value) || 0;
+      const diet = $('#rsvp-diet').value.trim();
+
+      /* Validation côté client — champs OBLIGATOIRES, messages clairs */
+      let ok = true, premierManquant = null;
+      const mauvais = (id, msg, sel) => { setErr(id, msg); ok = false; if (!premierManquant) premierManquant = sel; };
+      if (name.length < 3) mauvais('name', 'Merci d\'indiquer votre nom et prénom (3 caractères min.).', '#rsvp-name'); else setErr('name', '');
+      const phoneOk = /^[+0-9][0-9 ()\-.]{7,}$/.test(phone.replace(/\s/g, ''));
+      if (!phoneOk) mauvais('phone', 'Merci d\'indiquer un numéro WhatsApp valide (ex. +225 07 07 07 07 07).', '#rsvp-phone'); else setErr('phone', '');
+      if (!attending) mauvais('attending', 'Choisissez une option : présent·e ou absent·e.', 'input[name=attending]'); else setErr('attending', '');
+      if (guests < 0 || guests > 10) mauvais('guests', 'Entre 0 et 10 accompagnants.', '#rsvp-guests'); else setErr('guests', '');
+      if (!ok) {
+        /* le focus va au premier champ manquant (visible sur mobile) */
+        const el = premierManquant && $(premierManquant);
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el?.focus?.({ preventScroll: true });
+        return;
+      }
+      /* 🚫 double envoi impossible : si une réponse existe déjà, on ne modifie rien */
+      if (guest) { showConfirmation(guest); return; }
+
+      const g = { name, phone, attending, guests, diet, num: `INV-${String(Date.now()).slice(-6)}`, ts: Date.now(), synced: false };
+      /* 📡 Envoi au backend (réception des RSVP) — repli silencieux sur localStorage */
+      if (CONFIG.api?.enabled) {
+        try {
+          const resp = await fetch(`${CONFIG.api.base}/api/rsvp`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              first_name: name, phone,
+              status: attending === 'yes' ? 'present' : 'absent',
+              companions_count: guests, dietary_options: diet || null
+            })
+          });
+          if (resp.ok) { const saved = await resp.json(); g.synced = true; g.num = `INV-${String(saved.id).padStart(6, '0')}`; }
+        } catch { /* serveur injoignable : la réponse reste sur l'appareil */ }
+      }
+      LS.set('rsvp', g);
+      showConfirmation(g);
+    });
+
+    /* 🚫 Une seule réponse par personne : après l'envoi, le formulaire est
+       remplacé par la confirmation (défininitif). Le serveur identifie aussi
+       chaque invité par son numéro — impossible de créer un doublon. */
+
+    /* 💬 Confirmation WhatsApp — ouvre une discussion pré-remplie aux mariés.
+       Le backend fournit le lien (modèle maison) ; repli local si serveur absent. */
+    $('#wa-confirm').addEventListener('click', async () => {
+      if (!guest) return;
+      const first = guest.name.split(' ')[0];
+      const coupleWa = (CONFIG.api?.whatsappPhone || '').replace(/\D/g, '');
+      const local = `https://wa.me/${coupleWa}?text=` + encodeURIComponent(
+        `Bonjour Diane & Amon 🌿\nJe confirme ma présence au mariage du 4 décembre 2026.\n— ${guest.name} (${guest.num})`);
+      if (CONFIG.api?.enabled) {
+        try {
+          const r = await fetch(`${CONFIG.api.base}/api/whatsapp/confirm-link?phone=${encodeURIComponent(coupleWa)}&name=${encodeURIComponent(first)}`);
+          if (r.ok) { const d = await r.json(); window.open(d.link, '_blank'); return; }
+        } catch { /* repli ci-dessous */ }
+      }
+      window.open(local, '_blank');
+    });
+
+    /* 🖼️ Téléchargement du pass en PNG — composition canvas native */
+    function exportPass() {
+      if (!guest) return;
+      const letterBox = passSlot.querySelector('#qrcode canvas');
+      const r = passSlot.querySelector('div.rounded-2xl');
+      /* Compose un canvas 760×1080 : fond crème, en-tête, infos, QR */
+      const c = document.createElement('canvas'); c.width = 760; c.height = 1080;
+      const x = c.getContext('2d');
+      x.fillStyle = '#FAF7F2'; x.fillRect(0, 0, c.width, c.height);
+      x.fillStyle = '#E8DCC8'; x.fillRect(0, 0, c.width, 150);
+      x.fillStyle = '#8C6D33'; x.font = 'italic 52px Georgia, serif'; x.textAlign = 'center';
+      x.fillText('Pass Invité', c.width / 2, 95);
+      x.fillStyle = '#4A4238'; x.font = '600 44px Manrope, Arial, sans-serif';
+      x.fillText(guest.name, c.width / 2, 280);
+      x.font = '26px Manrope, Arial, sans-serif'; x.fillStyle = '#4A4238';
+      const lines = [CONFIG.wedding.label, `Reception : ${CONFIG.venue.reception.name}`].map(l => l.replace(/\&[a-z]+;/g, '') );
+      lines.forEach((l, i) => x.fillText(l, c.width / 2, 340 + i * 44));
+      x.font = '24px Manrope, Arial, sans-serif'; x.fillStyle = '#6b6154';
+      x.fillText(`${guest.guests} accompagnant(s)`, c.width / 2, 460);
+      x.font = 'bold 22px monospace'; x.fillStyle = '#8C6D33';
+      x.fillText(guest.num, c.width / 2, 520);
+      if (letterBox) x.drawImage(letterBox, (c.width - 280) / 2, 580, 280, 280);
+      x.strokeStyle = '#C9A961'; x.lineWidth = 3; x.strokeRect(24, 24, c.width - 48, c.height - 48);
+      x.fillStyle = '#8C6D33'; x.font = 'italic 26px Georgia, serif';
+      x.fillText(CONFIG.couple.hashtag.replace(/>/g, ''), c.width / 2, 980);
+      const a = Object.assign(document.createElement('a'), { href: c.toDataURL('image/png'), download: `pass-${guest.num}.png` });
+      document.body.append(a); a.click(); a.remove();
+      toast('🎟️ Pass téléchargé — à l\'entrée, le QR fait foi !');
+    }
+    $('#download-pass').addEventListener('click', exportPass);
+
+    /* Si l'invité·e avait déjà répondu → confirmation affichée, formulaire retiré */
+    if (guest) { showConfirmation(guest); }
+  })();
+
+  /* ═══════════ 9️⃣ LIVRE D'OR persistant (serveur + repli local) ═══════════ */
+  (() => {
+    const KEY = 'livredor', list = $('#gb-list');
+    const rel = ts => {
+      const d = Math.floor((Date.now() - ts) / 1e3);
+      const unit = d < 60 ? [1, 'à l\'instant'] : d < 3600 ? [60, 'min'] : d < 86400 ? [3600, 'h'] : [86400, 'j'];
+      if (unit[1] === 'à l\'instant') return unit[1];
+      const n = Math.floor(d / unit[0]); return `il y a ${n} ${unit[1]}`;
+    };
+    const localMsgs = () => LS.get(KEY, []);
+    /* Fusion sans doublons (serveur + appareil) — clé = nom + message */
+    function merge(server, local) {
+      const vus = new Map();
+      for (const m of [...server, ...local]) {
+        const cle = (m.name + '|' + m.msg).replace(/\s+/g, ' ').trim().toLowerCase();
+        if (!vus.has(cle)) vus.set(cle, m);
+      }
+      return [...vus.values()];
+    }
+    function render(msgs) {
+      const tries = [...msgs].sort((a, b) => b.ts - a.ts);
+      list.innerHTML = tries.length ? '' : '<li class="text-center text-ink/50 italic">Soyez le·la premier·ère à écrire ici… 💌</li>';
+      tries.forEach((m, i) => list.insertAdjacentHTML('beforeend', `
+        <li class="glass rounded-2xl px-6 py-5 shadow-soft ${i === 0 ? 'opacity-0 [animation:toastIn_.5s_ease_forwards]' : ''}">
+          <svg class="w-16 h-3 text-gold/70"><use href="#orn"/></svg>
+          <p class="font-serif italic text-lg text-ink mt-2 leading-relaxed">«&nbsp;${esc(m.msg)}&nbsp;»</p>
+          <p class="mt-3 text-xs text-ink/55"><strong class="font-semibold text-gold-deep">${esc(m.name)}</strong> · ${rel(m.ts)}</p>
+        </li>`));
+    }
+    /* 1) Affichage immédiat : les messages déjà connus sur cet appareil */
+    render(localMsgs());
+    /* 2) Puis les messages du SERVEUR — visibles par tous les invités,
+          conservés en base, ils restent affichés d'une visite à l'autre. */
+    (async () => {
+      if (!CONFIG.api?.enabled) return;
+      try {
+        const r = await fetch(`${CONFIG.api.base}/api/guestbook`);
+        if (!r.ok) return;
+        const serveur = (await r.json()).map(e => ({ name: e.name, msg: e.message, ts: Date.parse(e.created_at) || 0 }));
+        const fusion = merge(serveur, localMsgs());
+        LS.set(KEY, fusion);                    // mémorisés même hors-ligne
+        render(fusion);
+      } catch { /* serveur injoignable : les messages locaux restent affichés */ }
+    })();
+    const ta = $('#gb-msg'), counter = $('#gb-count');
+    ta.addEventListener('input', () => counter.textContent = `${ta.value.length} / ${ta.maxLength}`);
+    $('#gb-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = $('#gb-name').value.trim(), msg = ta.value.trim();
+      if (name.length < 2 || msg.length < 2) { $('#err-gb').textContent = 'Indiquez au moins votre petit nom et quelques mots doux 💛'; $('#err-gb').classList.remove('sr-only'); return; }
+      $('#err-gb').classList.add('sr-only');
+      const m = { name, msg, ts: Date.now() };
+      const msgs = localMsgs(); msgs.push(m); LS.set(KEY, msgs);
+      render(msgs); e.target.reset(); counter.textContent = '0 / 280';
+      toast('💌 Votre mot doux est enregistré, merci !');
+      /* 📡 Publication serveur : le message restera sur la page pour tout le monde */
+      if (CONFIG.api?.enabled) {
+        try {
+          const r = await fetch(`${CONFIG.api.base}/api/guestbook`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, message: msg })
+          });
+          if (r.ok) {
+            const saved = await r.json();
+            m.ts = Date.parse(saved.created_at) || m.ts;   // horodatage officiel
+            LS.set(KEY, localMsgs());
+          }
+        } catch { /* conservé en local, synchronisé à la prochaine visite */ }
+      }
+    });
+  })();
+
+  /* ═══════════ 2️⃣ MUSIQUE D'AMBIANCE — chansons complètes (fondu inclus) ══ */
+  (() => {
+    const btn = $('#music-btn'), wave = $('#wave'), label = $('#music-label'), icon = $('#music-icon');
+    /* TRACKS : la playlist de la soirée (CONFIG.music.tracks).
+       Le PREMIER titre joué est TRACKS[0] (KS Bloom — Mariage) ; ensuite,
+       ordre VRAIMENT aléatoire : sac de tirage — chaque titre passe une fois,
+       puis on remélange (jamais deux fois le même d'affilée).
+       Chaque chanson se joue JUSQU'À LA FIN (fondu de sortie intégré au fichier,
+       enchaînement automatique sur 'ended'). */
+    const TRACKS = (CONFIG.music.tracks || []).filter(t => t?.src);
+    const VOLUME = Math.min(Math.max((CONFIG.music.volume ?? 60) / 100, 0), 1);
+    let audio = null, ctx = null, gain = null, noCtx = false, idx = -1, playing = false, wantPlay = false;
+    let bag = [], switchToken = 0, preloads = {};
+
+    function refill() {
+      /* sac de tirage : tous les titres SAUF celui qui joue actuellement */
+      bag = [...TRACKS.keys()].filter(k => k !== idx);
+      for (let i = bag.length - 1; i > 0; i--) {           // mélange Fisher-Yates
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+      /* éviter de rejouer immédiatement le titre courant après remélange */
+      if (bag.length > 1 && bag[bag.length - 1] === idx) [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
+    }
+    const draw = () => { if (!bag.length) refill(); return bag.pop(); };
+
+    function setUI(on) {
+      playing = on;
+      btn.setAttribute('aria-pressed', String(on));
+      wave.classList.toggle('playing', on);
+      label.textContent = on ? `♪ ${TRACKS[idx]?.titre ?? ''}` : 'En pause';
+      icon.setAttribute('data-lucide', on ? 'pause' : 'music');
+      window.lucide?.createIcons();
+      if (on) { label.classList.remove('opacity-0', 'translate-x-2'); }
+      else setTimeout(() => { if (!playing) label.classList.add('opacity-0', 'translate-x-2'); }, 1600);
+    }
+
+    function ensureAudio() {
+      if (audio) return;
+      audio = new Audio();
+      audio.preload = 'auto';
+      audio.addEventListener('ended', () => { if (wantPlay) load(draw(), true); });
+      audio.addEventListener('error', () => {
+        if (!wantPlay && !playing) return;
+        toast('⏭ Titre indisponible — on enchaîne sur le suivant.');
+        load(draw(), true);
+      });
+    }
+
+    /* Web Audio : fondu doux du volume (change de titre en douceur).
+       Repli automatique sur audio.volume si AudioContext indisponible. */
+    function ensureGraph() {
+      if (ctx || noCtx || location.protocol === 'file:') return;
+      try {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const src = ctx.createMediaElementSource(audio);
+        gain = ctx.createGain();
+        src.connect(gain); gain.connect(ctx.destination);
+        gain.gain.value = VOLUME;
+      } catch { ctx = null; noCtx = true; }
+    }
+    function rampTo(target01, duree) {
+      const cible = Math.min(Math.max(target01, 0), 1) * VOLUME;
+      if (ctx && gain) {
+        const t = ctx.currentTime;
+        gain.gain.cancelScheduledValues(t);
+        gain.gain.setValueAtTime(gain.gain.value, t);
+        gain.gain.linearRampToValueAtTime(cible, t + duree);
+      } else {
+        audio.volume = cible;                             // repli : coupure sèche
+      }
+    }
+
+    function load(i, autoplay) {
+      idx = i;
+      const t = TRACKS[i];
+      if (wantPlay) {                                     // le titre suivant se précharge
+        const apres = TRACKS[(i + 1) % TRACKS.length];
+        if (!preloads[apres.src]) { const a = new Audio(apres.src); a.preload = 'auto'; preloads[apres.src] = a; }
+      }
+      audio.src = t.src;
+      audio.load();
+      if (autoplay) play();
+      else setUI(false);
+    }
+
+    function play() {
+      wantPlay = true;
+      ensureAudio(); ensureGraph();
+      try { ctx?.resume?.(); } catch {}
+      if (!audio.src) { load(idx < 0 ? 0 : draw(), true); return; }   // 1er titre imposé : KS Bloom — Mariage
+      audio.play().catch(() => {});
+      rampTo(1, 1.2);
+      setUI(true);
+    }
+
+    function pause() {
+      wantPlay = false;
+      rampTo(0, 0.6);                                     // fondu de sortie avant pause
+      const token = ++switchToken;
+      setTimeout(() => { if (wantPlay || token !== switchToken) return; audio.pause(); }, 650);
+      setUI(false);
+    }
+
+    /* Titre suivant : fondu de sortie court puis nouveau tirage aléatoire */
+    function next() {
+      if (!audio || !TRACKS.length) return;
+      wantPlay = true;
+      const token = ++switchToken;
+      if (!audio.paused) { rampTo(0, 0.9); setTimeout(() => { if (token === switchToken) load(draw(), true); }, 950); }
+      else load(draw(), true);
+    }
+
+    btn.addEventListener('click', () => { playing ? pause() : play(); });
+    /* Bouton « titre suivant » : change de morceau à tout moment */
+    $('#music-next').addEventListener('click', () => {
+      if (!audio) { toast('🎵 La playlist se prépare — un petit instant…'); return; }
+      next();
+    });
+
+    /* Préchargement du 1er titre dès l'ouverture de la page :
+       quand l'invité ouvrira l'enveloppe, la lecture partira instantanément. */
+    if (TRACKS.length) {
+      const premier = TRACKS[0].src;
+      const a = new Audio(premier); a.preload = 'auto'; preloads[premier] = a;
+    }
+
+    /* Exposé pour l'ouverture de l'enveloppe (geste utilisateur → autoplay autorisé) */
+    window.Music = {
+      play, pause, next,
+      state: () => (playing ? 1 : (wantPlay ? 3 : null)),
+      /* diagnostic (console) : window.Music.debug() */
+      debug: () => audio ? { idx, titre: TRACKS[idx]?.titre, pause: audio.paused, position: audio.currentTime,
+                              reseau: audio.readyState, erreur: audio.error?.code || null,
+                              ctx: ctx ? ctx.state : 'indisponible' } : null
+    };
+  })();
+
+  /* Partage : WhatsApp, copie du lien, copie du hashtag */
+  (() => {
+    const url = (location.protocol.startsWith('http')) ? location.origin + location.pathname : '';
+    const texte = `Vous êtes invité(e) au mariage de Diane & Amon 💍 ${CONFIG.wedding.label} !` + (url ? ` Ouvrez l'invitation : ${url}` : ' Ouvrez l\'invitation qui vous a été transmise.');
+    $('#share-hashtag-txt').textContent = CONFIG.couple.hashtag;
+    $('#share-wa')?.addEventListener('click', () => {
+      window.open(`https://wa.me/?text=${encodeURIComponent(texte)}`, '_blank', 'noopener');
+    });
+    $('#share-copy')?.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(url || texte); toast('🔗 Lien copié — collez-le où vous voulez !'); }
+      catch { toast('💌 ' + texte, 5000); }
+    });
+    $('#share-hashtag')?.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(CONFIG.couple.hashtag); toast('✨ Hashtag copié !'); }
+      catch { toast(CONFIG.couple.hashtag, 4000); }
+    });
+  })();
+
+  /* Icons Lucide → rendu une fois le script chargé (defer) */
+  document.addEventListener('DOMContentLoaded', () => { try { window.lucide?.createIcons(); } catch {} });
+  window.addEventListener('load', () => { try { window.lucide?.createIcons(); } catch {} });
+  </script>
+</body>
+</html>

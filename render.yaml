@@ -1,0 +1,51 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Déploiement automatique sur Render.com — Mariage Diane & Amon
+#
+# Utilisation :
+#   1. Poussez ce projet sur GitHub (fichier render.yaml à la racine du dépôt)
+#   2. https://render.com → New + → Blueprint → sélectionnez le dépôt
+#   3. Render lit ce fichier : choisissez un mot de passe admin quand il le
+#      demande, cliquez « Apply », et c'est déployé.
+#
+# Ce qui est déployé : le backend FastAPI qui sert aussi l'invitation entière
+# (index.html, admin.html, assets/) → une seule adresse pour tout.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  - type: web
+    name: mariage-diane-amon
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      # Version de Python stable avec nos dépendances
+      - key: PYTHON_VERSION
+        value: 3.12.4
+      # Mot de passe admin : Render vous demandera de le choisir au déploiement
+      # (identifiant : admin). Ne le partagez qu'aux personnes de confiance.
+      - key: ADMIN_PASSWORD
+        sync: false
+      # ── Base de données permanente (fortement recommandé) ──
+      # Sans elle, la base repart à zéro à chaque redéploiement (disque éphémère
+      # du plan gratuit). Créez une base Postgres gratuite sur https://neon.com
+      # (ou Supabase), copiez la « connection string » et collez-la dans Render :
+      # Dashboard → votre service → Environment → DATABASE_URL.
+      # Laissez ce placeholder tel quel au premier déploiement (SQLite local)
+      # puis ajoutez la variable ensuite — voir HEBERGER-SUR-RENDER.md.
+      - key: DATABASE_URL
+        sync: false
+      # Clé secrète JWT : générée automatiquement (visible dans le dashboard)
+      - key: SECRET_KEY
+        generateValue: true
+      # CORS ouvert : les invités consultent l'invitation depuis cette adresse
+      - key: CORS_ORIGINS
+        value: "*"
+      # ── Optionnel : envoi WhatsApp 100 % automatique (Cloud API Meta) ──
+      # Ajoutez ces deux variables dans le dashboard Render quand vous aurez
+      # créé votre app WhatsApp (voir backend/.env.example) :
+      # - key: WHATSAPP_PHONE_ID
+      #   sync: false
+      # - key: WHATSAPP_API_TOKEN
+      #   sync: false

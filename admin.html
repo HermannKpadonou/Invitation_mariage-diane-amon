@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administration — Mariage de Diane &amp; Amon</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2312362B' stroke='%23C9A227' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' fill='%23C9A227' text-anchor='middle'%3EDA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          cream: '#F7F1E3', sand: '#E4D5B8',
+          gold: { light:'#E9CF8F', DEFAULT:'#C9A227', deep:'#8C6D33' },
+          royal: { DEFAULT:'#12362B', deep:'#0B241C', light:'#1C4A3A' },
+          kente: { red:'#9E2B25', orange:'#C75B12' },
+          ink: '#2E2618'
+        },
+        fontFamily: {
+          serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+          display: ['Cinzel', 'Georgia', 'serif'],
+          sans: ['Manrope', 'system-ui', 'sans-serif']
+        }
+      } }
+    };
+  </script>
+  <style>
+    :root { --gold:#C9A227; --royal:#12362B; }
+    body { background:#0B241C; }
+    .gold-text { background:linear-gradient(165deg,#F1DC9E,#C9A227 38%,#8C6D33 62%,#E9CF8F);
+      -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .glass-d { background:rgba(18,54,43,.55); backdrop-filter:blur(8px); border:1px solid rgba(201,162,39,.35); }
+    .kente-x2 { height:22px; display:block; width:100%; }
+    .kente-x2-f { height:14px; display:block; width:100%; }
+    :focus-visible { outline:2px solid #C9A227; outline-offset:2px; border-radius:4px; }
+    input, select, textarea { color-scheme:dark; }
+    .row-in { animation:rowIn .4s ease; }
+    @keyframes rowIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
+  </style>
+</head>
+<body class="min-h-screen text-[#F3ECD9] font-sans antialiased">
+
+  <!-- ═══════════ CONNEXION ═══════════ -->
+  <div id="login-view" class="min-h-screen flex flex-col items-center justify-center px-4">
+    <div class="w-full max-w-sm text-center">
+      <svg class="w-14 h-9 gold-text mx-auto" viewBox="0 0 64 40"><use href="#crown-ico"/></svg>
+      <h1 class="font-display gold-text text-3xl tracking-wide mt-2">Administration</h1>
+      <p class="text-cream/60 text-sm mt-1">Mariage de Diane &amp; Amon — vendredi 4 décembre 2026 · Mairie de Port-Bouët (12h00) · Pieu de Grand-Bassam (14h00 / 15h00)</p>
+      <p class="text-cream/45 text-xs mt-0.5">Numéros à contacter : <a href="tel:+2250757677707" class="text-gold hover:text-gold-light">07 57 67 77 07</a> · <a href="tel:+2250708828676" class="text-gold hover:text-gold-light">07 08 82 86 76</a></p>
+      <form id="login-form" class="glass-d rounded-2xl p-6 mt-8 space-y-4 text-left">
+        <div>
+          <label for="lg-user" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Identifiant</label>
+          <input id="lg-user" type="text" required autocomplete="username" value="admin"
+                 class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-4 py-3 text-cream focus:border-gold focus:outline-none" />
+        </div>
+        <div>
+          <label for="lg-pass" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Mot de passe</label>
+          <input id="lg-pass" type="password" required autocomplete="current-password" placeholder="••••••••"
+                 class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-4 py-3 text-cream focus:border-gold focus:outline-none" />
+          <p id="lg-err" class="hidden text-kente-red text-xs mt-2 font-semibold"></p>
+        </div>
+        <div>
+          <label for="lg-api" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Adresse du serveur</label>
+          <input id="lg-api" type="url" placeholder="http://127.0.0.1:8010"
+                 class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-4 py-3 text-cream focus:border-gold focus:outline-none" />
+          <p class="text-cream/40 text-[11px] mt-1">En ligne (Render) : ne modifiez rien — l'adresse du site est déjà remplie. En local : adresse du serveur sur cet ordinateur.</p>
+        </div>
+        <button type="submit" class="w-full rounded-full bg-gold text-royal-deep font-display uppercase tracking-[.2em] text-xs font-semibold py-3.5 hover:bg-gold-light transition-colors">
+          Entrer
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════ TABLEAU DE BORD ═══════════ -->
+  <div id="dash-view" class="hidden">
+    <!-- Bandeau kente -->
+    <div class="sticky top-0 z-30 bg-royal-deep/95 backdrop-blur border-b border-gold/30">
+      <svg class="kente-x2-f" aria-hidden="true"><rect width="100%" height="100%" fill="url(#kente-pat)"/></svg>
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <svg class="w-8 h-5 gold-text hidden" aria-hidden="true"><use href="#crown-ico"/></svg>
+          <span class="font-display text-sm tracking-[.15em] text-gold uppercase">Tableau de bord</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="pwd-btn" class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition-colors">
+            <i data-lucide="key-round" class="w-3.5 h-3.5"></i> Mot de passe
+          </button>
+          <button id="refresh-btn" class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition-colors">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Actualiser
+          </button>
+          <button id="logout-btn" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-cream/60 text-xs hover:text-cream transition-colors">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Quitter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-10">
+
+      <!-- Statistiques -->
+      <section aria-labelledby="stats-h">
+        <h2 id="stats-h" class="sr-only">Statistiques</h2>
+        <div id="stats-cards" class="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <!-- remplies par JS -->
+        </div>
+      </section>
+
+      <!-- WhatsApp -->
+      <section class="glass-d rounded-3xl p-6 sm:p-8" aria-labelledby="wa-h">
+        <h2 id="wa-h" class="font-display text-lg tracking-wide text-gold uppercase flex items-center gap-2">
+          <i data-lucide="message-circle" class="w-5 h-5"></i> Envoi WhatsApp
+        </h2>
+        <p class="text-cream/60 text-sm mt-2">Mode « lien » actif : chaque envoi génère un message pré-rempli, prêt à cliquer depuis votre téléphone. (Connectez la Cloud API Meta dans le <code class="text-gold/90">.env</code> pour l'envoi 100&nbsp;% automatique.)</p>
+        <form id="wa-form" class="grid sm:grid-cols-4 gap-3 mt-5 items-end">
+          <div>
+            <label for="wa-tpl" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Modèle</label>
+            <select id="wa-tpl" class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-3 py-2.5 text-cream text-sm focus:border-gold focus:outline-none">
+              <option value="invitation">Invitation</option>
+              <option value="reminder" selected>Rappel (pas encore répondu)</option>
+              <option value="thanks">Remerciement</option>
+            </select>
+          </div>
+          <div>
+            <label for="wa-status" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Cible</label>
+            <select id="wa-status" class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-3 py-2.5 text-cream text-sm focus:border-gold focus:outline-none">
+              <option value="pending">En attente de réponse</option>
+              <option value="present">Confirmés présents</option>
+              <option value="absent">Absents</option>
+              <option value="">Tous les invités</option>
+            </select>
+          </div>
+          <div>
+            <label for="wa-url" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Lien de l'invitation</label>
+            <input id="wa-url" type="url" value="http://localhost:8010" placeholder="https://mon-invitation.netlify.app"
+                   class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-3 py-2.5 text-cream text-sm focus:border-gold focus:outline-none" />
+          </div>
+          <button type="submit" id="wa-go" class="rounded-full bg-[#25D366] text-[#08351c] font-bold text-sm px-5 py-2.5 hover:bg-[#1fb457] transition-colors inline-flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i> Générer les envois
+          </button>
+        </form>
+        <div id="wa-results" class="hidden mt-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-cream/80" id="wa-count"></h3>
+            <button id="wa-open-all" class="text-xs text-gold underline underline-offset-4 hover:text-gold-light">Ouvrir tous les liens (un par un)</button>
+          </div>
+          <ul id="wa-list" class="mt-3 space-y-2 max-h-72 overflow-y-auto pr-1"></ul>
+        </div>
+      </section>
+
+      <!-- Liste des invités -->
+      <section class="glass-d rounded-3xl p-6 sm:p-8" aria-labelledby="g-h">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="g-h" class="font-display text-lg tracking-wide text-gold uppercase flex items-center gap-2">
+            <i data-lucide="users" class="w-5 h-5"></i> Invités <span id="g-count" class="text-cream/50 text-sm"></span>
+          </h2>
+          <div class="flex gap-2">
+            <button id="export-csv" class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/50 text-gold text-xs font-semibold hover:bg-gold/10 transition-colors">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+            </button>
+            <button id="add-guest" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold text-royal-deep text-xs font-bold hover:bg-gold-light transition-colors">
+              <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Ajouter
+            </button>
+          </div>
+        </div>
+        <div class="mt-5 overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-gold/80 text-xs uppercase tracking-widest border-b border-gold/25">
+                <th class="py-3 pr-3">Invité</th><th class="py-3 pr-3">Téléphone</th>
+                <th class="py-3 pr-3">Réponse</th><th class="py-3 pr-3">Accomp.</th>
+                <th class="py-3 pr-3">Régime</th><th class="py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="guest-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="pb-8 text-center">
+      <p class="text-[11px] text-cream/35 tracking-[.2em]">© 2026 — Ahimsa&nbsp;HkM</p>
+    </footer>
+  </div>
+
+  <!-- Fenêtre : changement de mot de passe admin -->
+  <div id="pwd-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4">
+    <form id="pwd-form" class="glass-d rounded-2xl p-6 w-full max-w-sm space-y-4" role="dialog" aria-modal="true" aria-label="Changer le mot de passe">
+      <h3 class="font-display text-sm tracking-[.15em] text-gold uppercase flex items-center gap-2">
+        <i data-lucide="key-round" class="w-4 h-4"></i> Changer le mot de passe
+      </h3>
+      <div>
+        <label for="pw-old" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Mot de passe actuel</label>
+        <input id="pw-old" type="password" autocomplete="current-password" required
+               class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-4 py-3 text-cream focus:border-gold focus:outline-none" />
+      </div>
+      <div>
+        <label for="pw-new" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Nouveau mot de passe (8 caractères min.)</label>
+        <input id="pw-new" type="password" autocomplete="new-password" minlength="8" required
+               class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-4 py-3 text-cream focus:border-gold focus:outline-none" />
+      </div>
+      <div>
+        <label for="pw-confirm" class="block text-xs uppercase tracking-widest text-gold/80 mb-1">Confirmer le nouveau</label>
+        <input id="pw-confirm" type="password" autocomplete="new-password" required
+               class="w-full rounded-xl bg-royal-deep/70 border border-gold/40 px-4 py-3 text-cream focus:border-gold focus:outline-none" />
+      </div>
+      <p id="pw-err" class="hidden text-kente-red text-xs font-semibold"></p>
+      <div class="flex gap-2">
+        <button type="button" id="pw-cancel" class="flex-1 rounded-full border border-gold/40 text-cream/70 text-xs font-semibold py-3 hover:bg-gold/10 transition-colors">Annuler</button>
+        <button type="submit" class="flex-1 rounded-full bg-gold text-royal-deep text-xs font-bold py-3 hover:bg-gold-light transition-colors">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Bibliothèque SVG locale (couronne + kente) -->
+  <svg style="display:none" aria-hidden="true">
+    <defs>
+      <pattern id="kente-pat" width="48" height="14" patternUnits="userSpaceOnUse">
+        <rect width="48" height="14" fill="#0E2C22"/>
+        <path d="M2 7 L11 0 L20 7 L11 14 Z" fill="#C9A227"/>
+        <path d="M20 7 L27 1 L34 7 L27 13 Z" fill="none" stroke="#9E2B25" stroke-width="1.2"/>
+        <circle cx="40" cy="7" r="2.6" fill="#E9CF8F"/>
+        <circle cx="11" cy="7" r="1.4" fill="#0E2C22"/>
+        <path d="M46 0 v14" stroke="#1C4A3A" stroke-width="1.4"/>
+      </pattern>
+      <symbol id="crown-ico" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 32 L4 10 L18 20 L32 6 L46 20 L60 10 L58 32 Z"/>
+        <path d="M10 37 h44" stroke-width="2.4"/>
+        <circle cx="4" cy="8" r="2.6" fill="currentColor" stroke="none"/>
+        <circle cx="32" cy="4" r="2.6" fill="currentColor" stroke="none"/>
+        <circle cx="60" cy="8" r="2.6" fill="currentColor" stroke="none"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <script>
+  'use strict';
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  /* Mini notification éphémère (haut de l'écran) */
+  function toast(message, duree = 3500) {
+    const el = document.createElement('div');
+    el.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-[60] glass-d rounded-full px-5 py-2.5 text-xs font-semibold text-gold shadow-lift transition-opacity duration-300';
+    el.textContent = message;
+    document.body.append(el);
+    requestAnimationFrame(() => el.classList.remove('opacity-0'));
+    setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 350); }, duree);
+  }
+  let TOKEN = sessionStorage.getItem('admin.token') || '';
+  let GUESTS = [];
+
+  /* ── Auth ─────────────────────────────────────────────── */
+  /* Adresse du serveur : en ligne (Render…), le site EST le serveur → même
+     origine automatiquement. En local (file://), on garde l'adresse mémorisée. */
+  let API = location.protocol.startsWith('http')
+    ? location.origin
+    : (localStorage.getItem('admin.api') || 'http://127.0.0.1:8010');
+  $('#lg-api').value = API;
+  const authHeaders = () => ({ 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' });
+
+  $('#login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('#lg-err').classList.add('hidden');
+    API = $('#lg-api').value.trim().replace(/\/+$/, '');
+    localStorage.setItem('admin.api', API);
+    try {
+      const r = await fetch(`${API}/api/auth/login`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: $('#lg-user').value.trim(), password: $('#lg-pass').value })
+      });
+      if (!r.ok) { $('#lg-err').textContent = 'Identifiants incorrects.'; $('#lg-err').classList.remove('hidden'); return; }
+      TOKEN = (await r.json()).access_token;
+      sessionStorage.setItem('admin.token', TOKEN);
+      enter();
+    } catch {
+      $('#lg-err').textContent = 'Serveur injoignable — démarrez-le (double-clic sur DEMARRER-SERVEUR.bat) puis vérifiez l\u2019adresse ci-dessus.';
+      $('#lg-err').classList.remove('hidden');
+    }
+  });
+  $('#logout-btn').addEventListener('click', () => { sessionStorage.removeItem('admin.token'); TOKEN = ''; location.reload(); });
+
+  /* ── Changement de mot de passe ───────────────────────── */
+  const pwdModal = $('#pwd-modal');
+  $('#pwd-btn').addEventListener('click', () => {
+    pwdModal.classList.remove('hidden');
+    $('#pw-err').classList.add('hidden');
+    $('#pw-old').value = ''; $('#pw-new').value = ''; $('#pw-confirm').value = '';
+    $('#pw-old').focus();
+    try { window.lucide?.createIcons(); } catch {}
+  });
+  const fermerPwd = () => pwdModal.classList.add('hidden');
+  $('#pw-cancel').addEventListener('click', fermerPwd);
+  pwdModal.addEventListener('click', e => { if (e.target === pwdModal) fermerPwd(); });
+  $('#pwd-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('#pw-err');
+    if ($('#pw-new').value !== $('#pw-confirm').value) {
+      err.textContent = 'Les deux nouveaux mots de passe ne correspondent pas.';
+      err.classList.remove('hidden'); return;
+    }
+    try {
+      const r = await fetch(`${API}/api/auth/change-password`, {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ ancien: $('#pw-old').value, nouveau: $('#pw-new').value })
+      });
+      if (r.status === 401) {   // jeton expiré → retour au login
+        sessionStorage.removeItem('admin.token'); TOKEN = ''; location.reload(); return;
+      }
+      if (!r.ok) { err.textContent = (await r.json()).detail || 'Échec de la modification.'; err.classList.remove('hidden'); return; }
+      fermerPwd();
+      toast('Mot de passe mis à jour — il est actif immédiatement.');
+    } catch {
+      err.textContent = 'Serveur injoignable — vérifiez l\u2019adresse du serveur.';
+      err.classList.remove('hidden');
+    }
+  });
+
+  /* ── Statistiques ─────────────────────────────────────── */
+  const STAT_DEFS = [
+    ['total_guests', 'Invités', 'users', '#C9A227'],
+    ['total_present', 'Présents', 'check-circle', '#5BA85F'],
+    ['total_absent', 'Absents', 'x-circle', '#C75B12'],
+    ['total_pending', 'En attente', 'clock', '#E9CF8F'],
+    ['total_companions', 'Accompagnants', 'user-plus', '#9CAF88']
+  ];
+  async function loadStats() {
+    const s = await (await fetch(`${API}/api/stats`, { headers: authHeaders() })).json();
+    $('#stats-cards').innerHTML = STAT_DEFS.map(([key, label, icon, color]) => `
+      <div class="glass-d rounded-2xl p-4 text-center row-in">
+        <i data-lucide="${icon}" class="w-5 h-5 mx-auto" style="color:${color}"></i>
+        <span class="block font-display gold-text text-3xl mt-1" style="font-variant-numeric:tabular-nums">${s[key]}</span>
+        <span class="text-[10px] uppercase tracking-widest text-cream/60">${label}</span>
+      </div>`).join('');
+    window.lucide?.createIcons();
+  }
+
+  /* ── Invités ──────────────────────────────────────────── */
+  const STATUS_BADGE = { present: ['bg-[#5BA85F]/20 text-[#8fd694] border-[#5BA85F]/40', 'Présent·e'],
+                         absent:  ['bg-kente-orange/15 text-kente-orange border-kente-orange/40', 'Absent·e'],
+                         pending: ['bg-gold/15 text-gold border-gold/40', 'En attente'] };
+  async function loadGuests() {
+    GUESTS = await (await fetch(`${API}/api/guests`, { headers: authHeaders() })).json();
+    $('#g-count').textContent = `(${GUESTS.length})`;
+    $('#guest-rows').innerHTML = GUESTS.map(g => {
+      const [cls, label] = STATUS_BADGE[g.status] || STATUS_BADGE.pending;
+      return `<tr class="border-b border-gold/10 row-in" data-id="${g.id}">
+        <td class="py-3 pr-3 font-semibold">${esc(g.first_name)} ${esc(g.last_name)}</td>
+        <td class="py-3 pr-3 text-cream/70">${esc(g.phone || '—')}</td>
+        <td class="py-3 pr-3"><select data-act="status" class="rounded-lg bg-royal-deep/70 border border-gold/30 px-2 py-1 text-xs text-cream focus:outline-none">
+          ${['pending','present','absent'].map(v => `<option value="${v}" ${g.status === v ? 'selected' : ''}>${STATUS_BADGE[v][1]}</option>`).join('')}
+        </select></td>
+        <td class="py-3 pr-3 text-center">${g.companions_count || 0}</td>
+        <td class="py-3 pr-3 text-cream/60 text-xs">${esc(g.dietary_options || '—')}</td>
+        <td class="py-3 text-right">
+          ${g.phone ? `<button data-act="wa" title="Message WhatsApp" class="inline-flex w-8 h-8 items-center justify-center rounded-full text-[#25D366] hover:bg-[#25D366]/15 transition-colors"><i data-lucide="message-circle" class="w-4 h-4"></i></button>` : ''}
+          <button data-act="del" title="Supprimer" class="inline-flex w-8 h-8 items-center justify-center rounded-full text-kente-red hover:bg-kente-red/15 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        </td></tr>`;
+    }).join('');
+    window.lucide?.createIcons();
+  }
+
+  $('#guest-rows').addEventListener('change', async e => {
+    if (e.target.dataset.act !== 'status') return;
+    const id = e.target.closest('tr').dataset.id;
+    const status = e.target.value;
+    const r = await fetch(`${API}/api/guests/${id}`, { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ status }) });
+    if (r.ok) { await Promise.all([loadGuests(), loadStats()]); }
+  });
+  $('#guest-rows').addEventListener('click', async e => {
+    const btn = e.target.closest('[data-act]'); if (!btn) return;
+    const id = Number(btn.closest('tr').dataset.id);
+    const g = GUESTS.find(x => x.id === id);
+    if (btn.dataset.act === 'del') {
+      if (!confirm(`Supprimer ${g.first_name} ${g.last_name} de la liste ?`)) return;
+      await fetch(`${API}/api/guests/${id}`, { method: 'DELETE', headers: authHeaders() });
+      await Promise.all([loadGuests(), loadStats()]);
+    }
+    if (btn.dataset.act === 'wa') {
+      const first = g.first_name.split(' ')[0];
+      window.open(`${API}/api/whatsapp/preview?template=invitation&phone=${encodeURIComponent(g.phone)}&guest_name=${encodeURIComponent(first)}&base_url=${encodeURIComponent($('#wa-url').value)}`, '_blank');
+    }
+  });
+
+  $('#add-guest').addEventListener('click', async () => {
+    const name = prompt('Nom et prénom de l\'invité :'); if (!name) return;
+    const phone = prompt('Téléphone WhatsApp (ex. +225 07…) :') || '';
+    const body = { first_name: name.split(' ')[0], last_name: name.split(' ').slice(1).join(' ') || '-', phone, status: 'pending' };
+    const r = await fetch(`${API}/api/guests`, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body) });
+    if (!r.ok) { alert('Ajout impossible — vérifiez le nom (prénom requis).'); return; }
+    await Promise.all([loadGuests(), loadStats()]);
+  });
+
+  $('#export-csv').addEventListener('click', () => {
+    const rows = [['Prénom','Nom','Téléphone','Statut','Accompagnants','Régime','Transport','Notes','Reçu le'],
+      ...GUESTS.map(g => [g.first_name, g.last_name, g.phone || '', g.status, g.companions_count || 0, g.dietary_options || '', g.transport_needs ? 'oui' : 'non', g.notes || '', new Date(g.created_at).toLocaleString('fr-FR')])];
+    const csv = '\ufeff' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\r\n');
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })), download: 'invites-mariage.csv' });
+    document.body.append(a); a.click(); a.remove();
+  });
+
+  /* ── WhatsApp broadcast ───────────────────────────────── */
+  $('#wa-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = $('#wa-go'); btn.disabled = true; btn.textContent = 'Génération…';
+    try {
+      const r = await fetch(`${API}/api/whatsapp/broadcast`, {
+        method: 'POST', headers: authHeaders(),
+        body: JSON.stringify({ template: $('#wa-tpl').value, only_status: $('#wa-status').value || null, base_url: $('#wa-url').value, force_link: true })
+      });
+      if (r.status === 404) throw new Error('Aucun invité dans cette catégorie.');
+      if (!r.ok) throw new Error('Erreur du serveur.');
+      const data = await r.json();
+      const links = data.results.filter(x => x.link);
+      $('#wa-count').textContent = `${links.length} message(s) prêt(s) — cliquez pour ouvrir dans WhatsApp`;
+      $('#wa-list').innerHTML = links.map(x => `
+        <li class="flex items-center justify-between gap-3 rounded-xl bg-royal-deep/50 border border-gold/20 px-4 py-2.5">
+          <span class="text-sm">${esc(x.guest)} <span class="text-cream/40 text-xs">· ${esc(x.phone)}</span></span>
+          <a href="${esc(x.link)}" target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#25D366] text-[#08351c] text-xs font-bold px-4 py-1.5 hover:bg-[#1fb457] transition-colors">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Envoyer
+          </a></li>`).join('');
+      $('#wa-results').classList.remove('hidden');
+      window.lucide?.createIcons();
+      $('#wa-open-all').onclick = () => links.forEach((x, i) => setTimeout(() => window.open(x.link, '_blank'), i * 600));
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i> Générer les envois';
+      window.lucide?.createIcons();
+    }
+  });
+
+  $('#refresh-btn').addEventListener('click', async () => { await Promise.all([loadStats(), loadGuests()]); });
+
+  /* ── Démarrage ────────────────────────────────────────── */
+  async function enter() {
+    try { await Promise.all([loadStats(), loadGuests()]); }
+    catch { sessionStorage.removeItem('admin.token'); TOKEN = ''; return; }
+    $('#login-view').classList.add('hidden');
+    $('#dash-view').classList.remove('hidden');
+    window.lucide?.createIcons();
+  }
+  if (TOKEN) enter();
+  window.lucide?.createIcons();
+  </script>
+</body>
+</html>
