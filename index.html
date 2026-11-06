@@ -990,6 +990,16 @@
     $$('.cfg-date').forEach(el => el.textContent = CONFIG.wedding.label);
   })();
 
+  /* Ping de visite : prévient les mariés qu'un invité consulte l'invitation
+     (une fois par session — les visites sont regroupées côté serveur pour
+     ne pas les spammer). Silencieux : aucun effet si le backend est absent. */
+  try {
+    if (!sessionStorage.getItem('mariage.visitPing')) {
+      sessionStorage.setItem('mariage.visitPing', '1');
+      fetch(`${CONFIG.api.base}/api/stats/visit`, { method: 'POST' }).catch(() => {});
+    }
+  } catch { /* navigation privée — on passe */ }
+
   /* ═══════════ 1️⃣ ENVELOPPE : motion design orchestré en JS ═══════════ */
   (() => {
     const overlay = $('#intro-overlay'), env = $('#envelope'), btn = $('#envelope-btn');

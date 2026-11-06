@@ -32,4 +32,25 @@ class Config:
     # exigent de toute façon un JWT admin.
     CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 
+    # ── Notifications des mariés (RSVP, livre d'or, visites) ─────────────
+    # Email : SMTP — avec Gmail, créez un mot de passe d'application sur
+    # https://myaccount.google.com/apppasswords puis :
+    #   SMTP_HOST=smtp.gmail.com   SMTP_PORT=587   SMTP_USER=vous@gmail.com
+    NOTIFY_EMAIL_TO = os.getenv("NOTIFY_EMAIL_TO", "hmkpadonou@gmail.com")
+    SMTP_HOST = os.getenv("SMTP_HOST", "")
+    SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USER = os.getenv("SMTP_USER", "")
+    SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+    # WhatsApp (gratuit) via CallMeBot : sur le téléphone des mariés, ajoutez le
+    # numéro du bot indiqué sur https://www.callmebot.com/whatsapp.php aux
+    # contacts, envoyez-lui « I allow callmebot to send me messages », attendez
+    # l'apikey, puis définissez CALLMEBOT_APIKEY sur Render.
+    NOTIFY_WHATSAPP_TO = os.getenv("NOTIFY_WHATSAPP_TO", "+2250757677707")
+    CALLMEBOT_APIKEY = os.getenv("CALLMEBOT_APIKEY", "")
+    # Visites : au plus une notification toutes les VISIT_NOTIFY_MINUTES minutes.
+    VISIT_NOTIFY_MINUTES = int(os.getenv("VISIT_NOTIFY_MINUTES", "15"))
+    # Adresse publique du site (pour les liens dans les emails) — renseignée
+    # automatiquement côté invitation via PUBLIC_BASE_URL, sinon à définir.
+    PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "")
+
 settings = Config()

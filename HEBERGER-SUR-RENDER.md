@@ -109,6 +109,44 @@ ou redémarrage, la base SQLite repart à zéro. La solution : brancher une base
 
 ---
 
+## 🔔 Notifications des mariés — être alerté à chaque interaction (5 min, gratuit)
+
+Recevez un **email** (hmkpadonou@gmail.com) et/ou un **WhatsApp** (07 57 67 77 07)
+quand un invité répond au RSVP, écrit dans le livre d'or, ou consulte
+l'invitation (visites regroupées : 1 message au maximum toutes les 15 min).
+
+### Email (SMTP Gmail)
+
+1. Sur le compte Google **hmkpadonou@gmail.com**, activez la validation
+   en deux étapes, puis créez un **mot de passe d'application** :
+   https://myaccount.google.com/apppasswords
+2. Sur **Render** → votre service → **Environment** → **Add Environment Variable** :
+
+   | Clé | Valeur |
+   |---|---|
+   | `SMTP_HOST` | `smtp.gmail.com` |
+   | `SMTP_PORT` | `587` |
+   | `SMTP_USER` | `hmkpadonou@gmail.com` |
+   | `SMTP_PASSWORD` | le mot de passe d'application (16 caractères) |
+
+### WhatsApp (CallMeBot — gratuit)
+
+1. Sur le téléphone **07 57 67 77 07** : ajoutez aux contacts le numéro du bot
+   affiché sur https://www.callmebot.com/whatsapp.php *(ex. +34 644 26 33 77 —
+   si le bot est « full », réessayez dans quelques jours)*
+2. Envoyez-lui en WhatsApp : `I allow callmebot to send me messages`
+3. Le bot répond en ~1 min avec votre **apikey** → sur Render, ajoutez :
+   - clé : `CALLMEBOT_APIKEY` — valeur : l'apikey reçue
+4. (Facultatif) `NOTIFY_WHATSAPP_TO` pour notifier un autre numéro
+
+**Save** → redémarrage → testez : répondez au RSVP depuis votre téléphone,
+vous recevez l'alerte dans la foulée 🎉
+
+> ⚠️ Ces variables sont **optionnelles** : sans elles, le site fonctionne
+> normalement, simplement sans notification.
+
+---
+
 ## Test de bout en bout (à faire vous-même)
 1. Ouvrez l'invitation sur **votre téléphone**
 2. Ouvrez l'enveloppe → la musique joue 🎵

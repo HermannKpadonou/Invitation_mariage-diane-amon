@@ -1,5 +1,5 @@
 """Invités : RSVP public (réception des confirmations) + gestion admin."""
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -7,6 +7,7 @@ from app.models import Guest
 from app.schemas import GuestCreate, GuestRead, GuestUpdate, RSVPCreate
 from app.utils.auth import get_current_admin
 from app.utils import whatsapp_service
+from app.utils import notify
 
 router = APIRouter(prefix="/api", tags=["Invités"])
 
@@ -16,7 +17,7 @@ VALID_STATUSES = {"present", "absent", "pending"}
 # ── RSVP PUBLIC — réception des confirmations depuis l'invitation ──────────
 @router.post("/rsvp", response_model=GuestRead, status_code=status.HTTP_201_CREATED,
              summary="Réception d'une confirmation de présence (public, sans auth)")
-def receive_rsvp(body: RSVPCreate, db: Session = Depends(get_db)):
+def receive_rsvp(body: RSVPCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """Endpoint appelé par la page d'invitation.
 
     - Si le numéro de téléphone correspond à un invité déjà connu : mise à jour
@@ -38,7 +39,8 @@ def receive_rsvp(body: RSVPCreate, db: Session = Depends(get_db)):
                 guest = g
                 break
 
-    if guest is None:
+    is_new = guest is None
+    if is_new:
         names = body.first_name.strip().split(" ", 1)
         first = names[0]
         last = names[1] if len(names) > 1 else ""
@@ -51,6 +53,16 @@ def receive_rsvp(body: RSVPCreate, db: Session = Depends(get_db)):
     guest.dietary_options = body.dietary_options
     db.commit()
     db.refresh(guest)
+
+    # Notification des mariés (email + WhatsApp) — en arrière-plan,
+    # après la réponse à l'invité, et sans jamais la faire échouer.
+    background_tasks.add_task(
+        notify.notify_rsvp,
+        name=f"{guest.first_name} {guest.last_name}".strip(),
+        status=guest.status,
+        companions=guest.companions_count or 0,
+        is_new=is_new,
+    )
     return guest
 
 

@@ -6,13 +6,14 @@ Les messages sont stockés en base → ils restent visibles pour tout
 le monde, sur tous les appareils, même après un redéploiement
 (lorsqu'une base permanente est branchée via DATABASE_URL).
 """
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import GuestbookEntry
 from app.schemas import GuestbookCreate, GuestbookRead
 from app.utils.auth import get_current_admin
+from app.utils import notify
 
 router = APIRouter(prefix="/api/guestbook", tags=["Livre d'or"])
 
@@ -32,7 +33,7 @@ def list_messages(limit: int = Query(default=100, le=200), db: Session = Depends
 
 @router.post("", response_model=GuestbookRead, status_code=status.HTTP_201_CREATED,
              summary="Publier un message dans le livre d'or (public, sans auth)")
-def create_message(body: GuestbookCreate, db: Session = Depends(get_db)):
+def create_message(body: GuestbookCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     name = body.name.strip()
     message = body.message.strip()
     if len(name) < 2 or len(message) < 2:
@@ -42,6 +43,9 @@ def create_message(body: GuestbookCreate, db: Session = Depends(get_db)):
     db.add(entry)
     db.commit()
     db.refresh(entry)
+
+    # Notification des mariés (email + WhatsApp) — en arrière-plan.
+    background_tasks.add_task(notify.notify_guestbook, name=entry.name, message=entry.message)
 
     # Garde-fou : on ne conserve que les MAX_MESSAGES derniers messages
     total = db.query(GuestbookEntry).count()
