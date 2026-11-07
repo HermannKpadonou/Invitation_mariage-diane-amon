@@ -55,7 +55,15 @@ async def _send_email_brevo(subject: str, body: str) -> None:
             json=payload,
             headers={"api-key": settings.BREVO_API_KEY, "accept": "application/json"},
         )
-        r.raise_for_status()
+        if r.status_code >= 400:
+            # Diagnostic : ce que Brevo répond + longueur de la clé utilisée
+            # (permet de repérer une clé tronquée ou du mauvais type).
+            logger.warning(
+                "Brevo a répondu %s : %s | clé utilisée : longueur %d, début %r",
+                r.status_code, r.text[:200], len(settings.BREVO_API_KEY),
+                settings.BREVO_API_KEY[:8],
+            )
+            r.raise_for_status()
     logger.info("Email envoyé via Brevo à %s : %s", settings.NOTIFY_EMAIL_TO, subject)
 
 

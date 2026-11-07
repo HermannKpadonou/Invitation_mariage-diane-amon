@@ -39,14 +39,15 @@ class Config:
     # NOTIFY_EMAIL_TO) — à vérifier UNE fois dans Brevo (Expéditeurs & IP).
     # ⚠️ Recommandé sur Render gratuit, qui bloque les ports SMTP
     # (25/465/587) → le SMTP classique ci-dessous n'y fonctionne pas.
-    BREVO_API_KEY = os.getenv("BREVO_API_KEY", "")
-    NOTIFY_EMAIL_TO = os.getenv("NOTIFY_EMAIL_TO", "hmkpadonou@gmail.com")
+    # .strip() : immune aux espaces accidentels lors du copier-coller.
+    BREVO_API_KEY = os.getenv("BREVO_API_KEY", "").strip()
+    NOTIFY_EMAIL_TO = os.getenv("NOTIFY_EMAIL_TO", "hmkpadonou@gmail.com").strip()
     # Email : SMTP classique (Gmail : smtp.gmail.com:587 + mot de passe
     # d'application). Marche en local et sur hébergeurs qui autorisent SMTP.
-    SMTP_HOST = os.getenv("SMTP_HOST", "")
+    SMTP_HOST = os.getenv("SMTP_HOST", "").strip()
     SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
-    SMTP_USER = os.getenv("SMTP_USER", "")
-    SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+    SMTP_USER = os.getenv("SMTP_USER", "").strip()
+    SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "").strip()
     # WhatsApp (gratuit) via CallMeBot : sur le téléphone des mariés, ajoutez le
     # numéro du bot indiqué sur https://www.callmebot.com/whatsapp.php aux
     # contacts, envoyez-lui « I allow callmebot to send me messages », attendez
