@@ -8,7 +8,8 @@
   notifiés à chaque rafraîchissement de page).
 
 Canaux (tous optionnels — configurés via variables d'environnement) :
-- Email    : SMTP (Gmail : smtp.gmail.com:587 + mot de passe d'application)
+- Email    : API HTTP Brevo (recommandé sur Render gratuit, qui BLOQUE les
+             ports SMTP 25/465/587) ou SMTP classique (Gmail…)
 - WhatsApp : CallMeBot (gratuit, apikey personnelle) ou Cloud API Meta
 
 Chaque envoi est « fire-and-forget » : une panne de notification ne doit
@@ -39,9 +40,33 @@ def _smtp_send(msg: EmailMessage) -> None:
         s.send_message(msg)
 
 
+async def _send_email_brevo(subject: str, body: str) -> None:
+    """Envoi via l'API HTTP Brevo (https, port 443) — contourne le blocage
+    des ports SMTP qu'imposent les hébergeurs gratuits (Render…)."""
+    payload = {
+        "sender": {"name": "Invitation Diane & Amon", "email": settings.SMTP_USER or settings.NOTIFY_EMAIL_TO},
+        "to": [{"email": settings.NOTIFY_EMAIL_TO}],
+        "subject": subject,
+        "textContent": body,
+    }
+    async with httpx.AsyncClient(timeout=20) as client:
+        r = await client.post(
+            "https://api.brevo.com/v3/smtp-email",
+            json=payload,
+            headers={"api-key": settings.BREVO_API_KEY, "accept": "application/json"},
+        )
+        r.raise_for_status()
+    logger.info("Email envoyé via Brevo à %s : %s", settings.NOTIFY_EMAIL_TO, subject)
+
+
 async def _send_email(subject: str, body: str) -> None:
+    # Priorité à Brevo (API HTTP) — fonctionne même quand les ports SMTP
+    # sont bloqués par l'hébergeur (Render gratuit).
+    if settings.BREVO_API_KEY:
+        await _send_email_brevo(subject, body)
+        return
     if not (settings.SMTP_HOST and settings.SMTP_USER and settings.SMTP_PASSWORD):
-        logger.info("Email non envoyé (SMTP non configuré) : %s", subject)
+        logger.info("Email non envoyé (Brevo/SMTP non configuré) : %s", subject)
         return
     msg = EmailMessage()
     msg["Subject"] = subject

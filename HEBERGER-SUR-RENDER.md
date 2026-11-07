@@ -111,23 +111,36 @@ ou redémarrage, la base SQLite repart à zéro. La solution : brancher une base
 
 ## 🔔 Notifications des mariés — être alerté à chaque interaction (5 min, gratuit)
 
-Recevez un **email** (hmkpadonou@gmail.com) et/ou un **WhatsApp** (07 57 67 77 07)
+Recevez un **email** (kpadonouhermann@gmail.com) et/ou un **WhatsApp** (07 57 67 77 07)
 quand un invité répond au RSVP, écrit dans le livre d'or, ou consulte
 l'invitation (visites regroupées : 1 message au maximum toutes les 15 min).
 
-### Email (SMTP Gmail)
+### Email (API Brevo — la seule méthode qui marche sur Render gratuit)
 
-1. Sur le compte Google **hmkpadonou@gmail.com**, activez la validation
-   en deux étapes, puis créez un **mot de passe d'application** :
-   https://myaccount.google.com/apppasswords
-2. Sur **Render** → votre service → **Environment** → **Add Environment Variable** :
+> ⚠️ Depuis septembre 2025, le plan **gratuit** de Render bloque les ports
+> SMTP (25, 465, 587) : le SMTP Gmail classique renvoie
+> `[Errno 101] Network is unreachable`. On passe donc par l'**API HTTP**
+> de Brevo, qui parle HTTPS (port 443, jamais bloqué) — gratuit 300
+> emails/jour, sans carte bancaire.
+
+1. Créez un compte sur **https://app.brevo.com** avec
+   **kpadonouhermann@gmail.com** (« Continue with Google »)
+2. Vérifiez l'adresse d'expédition : menu **Expéditeurs & IP → Senders** →
+   **Add a sender** avec kpadonouhermann@gmail.com → validez l'email reçu
+3. Créez la clé API : **https://app.brevo.com/settings/keys/api** →
+   **Generate a new API key** → copiez la clé (elle commence par `xkeysib-`)
+4. Sur **Render** → votre service → **Environment** → **Add Environment Variable** :
 
    | Clé | Valeur |
    |---|---|
-   | `SMTP_HOST` | `smtp.gmail.com` |
-   | `SMTP_PORT` | `587` |
-   | `SMTP_USER` | `hmkpadonou@gmail.com` |
-   | `SMTP_PASSWORD` | le mot de passe d'application (16 caractères) |
+   | `BREVO_API_KEY` | la clé `xkeysib-…` copiée |
+   | `SMTP_USER` | `kpadonouhermann@gmail.com` *(sert d'expéditeur)* |
+
+5. **Save** → le service redémarre → testez : répondez au RSVP depuis
+   votre téléphone → l'alerte arrive dans la foulée 🎉
+
+*(Les variables `SMTP_HOST`/`SMTP_PORT`/`SMTP_PASSWORD` peuvent rester :
+elles ne servent qu'en local ou sur un hébergeur qui autorise le SMTP.)*
 
 ### WhatsApp (CallMeBot — gratuit)
 

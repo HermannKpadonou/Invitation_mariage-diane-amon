@@ -33,10 +33,16 @@ class Config:
     CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 
     # ── Notifications des mariés (RSVP, livre d'or, visites) ─────────────
-    # Email : SMTP — avec Gmail, créez un mot de passe d'application sur
-    # https://myaccount.google.com/apppasswords puis :
-    #   SMTP_HOST=smtp.gmail.com   SMTP_PORT=587   SMTP_USER=vous@gmail.com
+    # Email via l'API HTTP Brevo (https://brevo.com — gratuit 300/jour) :
+    # créez une clé sur https://app.brevo.com/settings/keys/api puis
+    # BREVO_API_KEY=xkeysib-... L'expéditeur est SMTP_USER (ou
+    # NOTIFY_EMAIL_TO) — à vérifier UNE fois dans Brevo (Expéditeurs & IP).
+    # ⚠️ Recommandé sur Render gratuit, qui bloque les ports SMTP
+    # (25/465/587) → le SMTP classique ci-dessous n'y fonctionne pas.
+    BREVO_API_KEY = os.getenv("BREVO_API_KEY", "")
     NOTIFY_EMAIL_TO = os.getenv("NOTIFY_EMAIL_TO", "hmkpadonou@gmail.com")
+    # Email : SMTP classique (Gmail : smtp.gmail.com:587 + mot de passe
+    # d'application). Marche en local et sur hébergeurs qui autorisent SMTP.
     SMTP_HOST = os.getenv("SMTP_HOST", "")
     SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
     SMTP_USER = os.getenv("SMTP_USER", "")
