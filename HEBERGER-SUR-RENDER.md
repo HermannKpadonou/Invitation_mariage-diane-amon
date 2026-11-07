@@ -142,6 +142,21 @@ l'invitation (visites regroupées : 1 message au maximum toutes les 15 min).
 *(Les variables `SMTP_HOST`/`SMTP_PORT`/`SMTP_PASSWORD` peuvent rester :
 elles ne servent qu'en local ou sur un hébergeur qui autorise le SMTP.)*
 
+### Plan B — Brevo par SMTP sur le port 2525 (si la clé API résiste)
+
+Render ne bloque que les ports 25, 465 et 587 : le port **2525** de Brevo
+passe. Sur la page **SMTP & API** de Brevo (section **SMTP** en haut),
+récupérez vos réglages, puis sur Render :
+
+   | Clé | Valeur |
+   |---|---|
+   | `SMTP_HOST` | `smtp-relay.brevo.com` |
+   | `SMTP_PORT` | `2525` |
+   | `SMTP_USER` | le **Login** affiché dans la section SMTP de Brevo |
+   | `SMTP_PASSWORD` | la **clé SMTP** (xkeysib-…) de cette même section |
+
+et **supprimez** `BREVO_API_KEY` (le code préfère l'API quand elle existe).
+
 ### WhatsApp (CallMeBot — gratuit)
 
 1. Sur le téléphone **07 57 67 77 07** : ajoutez aux contacts le numéro du bot
