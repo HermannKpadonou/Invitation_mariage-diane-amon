@@ -200,6 +200,13 @@
           </table>
         </div>
       </section>
+
+      <section class="glass-d rounded-3xl p-6 sm:p-8" aria-labelledby="gb-h">
+        <h2 id="gb-h" class="font-display text-lg tracking-wide text-gold uppercase flex items-center gap-2">
+          <i data-lucide="book-open" class="w-5 h-5"></i> Livre d'or <span id="gb-count" class="text-cream/50 text-sm"></span>
+        </h2>
+        <div id="gb-rows" class="mt-5 space-y-3"></div>
+      </section>
     </main>
 
     <footer class="pb-8 text-center">
@@ -428,6 +435,33 @@
     document.body.append(a); a.click(); a.remove();
   });
 
+  /* ── Livre d'or ───────────────────────────────────────── */
+  let ENTRIES = [];
+  async function loadGuestbook() {
+    ENTRIES = await (await fetch(`${API}/api/guestbook?limit=200`)).json();
+    $('#gb-count').textContent = `(${ENTRIES.length})`;
+    renderGuestbook();
+  }
+  function renderGuestbook() {
+    $('#gb-rows').innerHTML = ENTRIES.map(e => `
+      <div class="flex items-start gap-3 rounded-2xl bg-royal-deep/70 border border-gold/20 px-4 py-3" data-gb-id="${e.id}">
+        <div class="min-w-0 flex-1">
+          <p class="text-sm text-cream/90 break-words">« ${esc(e.message)} »</p>
+          <p class="text-xs text-gold/80 mt-1">${esc(e.name)} · ${new Date(e.created_at).toLocaleString('fr-FR')}</p>
+        </div>
+        <button data-gb-act="gb-del" title="Supprimer" class="shrink-0 inline-flex w-8 h-8 items-center justify-center rounded-full text-kente-red hover:bg-kente-red/15 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </div>`).join('') || '<p class="text-cream/40 text-sm">Aucun message pour le moment.</p>';
+    window.lucide?.createIcons();
+  }
+  $('#gb-rows').addEventListener('click', async e => {
+    const btn = e.target.closest('[data-gb-act]'); if (!btn) return;
+    const id = Number(btn.closest('[data-gb-id]').dataset.gbId);
+    const entry = ENTRIES.find(x => x.id === id);
+    if (!confirm(`Supprimer le message de ${entry ? entry.name : 'cet invité'} ?`)) return;
+    const r = await fetch(`${API}/api/guestbook/${id}`, { method: 'DELETE', headers: authHeaders() });
+    if (r.ok) { await loadGuestbook(); toast('Message supprimé 🗑️'); }
+  });
+
   /* ── WhatsApp broadcast ───────────────────────────────── */
   const WA_HINTS = {
     invitation: 'La belle invitation complète avec le lien du site — à envoyer en premier à chaque invité.',
@@ -497,11 +531,11 @@
     }
   });
 
-  $('#refresh-btn').addEventListener('click', async () => { await Promise.all([loadStats(), loadGuests()]); });
+  $('#refresh-btn').addEventListener('click', async () => { await Promise.all([loadStats(), loadGuests(), loadGuestbook()]); });
 
   /* ── Démarrage ────────────────────────────────────────── */
   async function enter() {
-    try { await Promise.all([loadStats(), loadGuests()]); }
+    try { await Promise.all([loadStats(), loadGuests(), loadGuestbook()]); }
     catch { sessionStorage.removeItem('admin.token'); TOKEN = ''; return; }
     $('#login-view').classList.add('hidden');
     $('#dash-view').classList.remove('hidden');
